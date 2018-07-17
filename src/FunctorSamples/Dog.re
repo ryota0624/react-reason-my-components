@@ -9,6 +9,7 @@ type dog = {
 
 
 
+
 module Dog = {
   type t = dog;
   let height = t => t.height;
@@ -17,5 +18,3 @@ module Dog = {
 }
 
 module DogBook = AnimalBook(Dog);
-
-

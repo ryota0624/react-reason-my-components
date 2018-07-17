@@ -3,6 +3,7 @@
 
 var List = require("bs-platform/lib/js/list.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Caml_exceptions = require("bs-platform/lib/js/caml_exceptions.js");
 
 function getWidthSize(size) {
   if (typeof size === "number") {
@@ -20,33 +21,17 @@ function getWidthSize(size) {
   }
 }
 
-function reportHeaderItemWidthDefaultSize(item) {
-  if (item >= 3) {
-    switch (item - 3 | 0) {
-      case 0 : 
-          return /* Medium */1;
-      case 1 : 
-          return /* Small */0;
-      case 2 : 
-          return /* Free */[10.0];
-      
-    }
-  } else {
-    return /* Small */0;
-  }
-}
+var A = Caml_exceptions.create("ReportHeader-ReactTemplate.A");
 
-function headerItemWidthDefaultSize(item) {
-  if (typeof item === "number") {
-    if (item !== 1) {
-      return /* Small */0;
-    } else {
-      return /* Large */2;
-    }
-  } else {
-    return reportHeaderItemWidthDefaultSize(item[0]);
-  }
-}
+var B = Caml_exceptions.create("ReportHeader-ReactTemplate.B");
+
+var C = Caml_exceptions.create("ReportHeader-ReactTemplate.C");
+
+var D = Caml_exceptions.create("ReportHeader-ReactTemplate.D");
+
+var E = Caml_exceptions.create("ReportHeader-ReactTemplate.E");
+
+var F = Caml_exceptions.create("ReportHeader-ReactTemplate.F");
 
 function headerItemToJs(param) {
   return {
@@ -66,14 +51,6 @@ function headerItemFromJs(param) {
 
 function getHeaderItemWidthSize(headerItem) {
   return getWidthSize(headerItem[/* size */1]);
-}
-
-function headerItemFromAny(headerItem) {
-  return JSON.stringify(headerItemToJs(headerItem));
-}
-
-function anyToHeaderItem(anyString) {
-  return headerItemFromJs(JSON.parse(anyString));
 }
 
 function valueToString(func, value) {
@@ -111,36 +88,17 @@ function getWidthSizeByTableWidthSize(tableWidthSize, header) {
   }
 }
 
-var anyString = JSON.stringify({
-      column: /* column : Name */1,
-      size: /* size : Free */[100.0],
-      isSizeFiexed: /* isSizeFiexed */false
-    });
-
-console.log(getWidthSizeByTableWidthSize(1000.0, /* :: */[
-          headerItemFromJs(JSON.parse(anyString)),
-          /* [] */0
-        ]));
-
-var anyString$1 = JSON.stringify({
-      column: /* column : Name */1,
-      size: /* size : Free */[100.0],
-      isSizeFiexed: /* isSizeFiexed */false
-    });
-
-var v = headerItemFromJs(JSON.parse(anyString$1));
-
-console.log(getWidthSize(v[/* size */1]));
-
 exports.getWidthSize = getWidthSize;
-exports.reportHeaderItemWidthDefaultSize = reportHeaderItemWidthDefaultSize;
-exports.headerItemWidthDefaultSize = headerItemWidthDefaultSize;
+exports.A = A;
+exports.B = B;
+exports.C = C;
+exports.D = D;
+exports.E = E;
+exports.F = F;
 exports.headerItemToJs = headerItemToJs;
 exports.headerItemFromJs = headerItemFromJs;
 exports.getHeaderItemWidthSize = getHeaderItemWidthSize;
-exports.headerItemFromAny = headerItemFromAny;
-exports.anyToHeaderItem = anyToHeaderItem;
 exports.valueToString = valueToString;
 exports.stringFromValue = stringFromValue;
 exports.getWidthSizeByTableWidthSize = getWidthSizeByTableWidthSize;
-/*  Not a pure module */
+/* No side effect */
