@@ -7,62 +7,15 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 
+function make(children) {
+  return ReasonReact.wrapJsForReason(React.Fragment, { }, children);
+}
+
+var Fragment = /* module */[/* make */make];
+
 var component = ReasonReact.statelessComponent("FlexibleTable");
 
-function Table(T) {
-  var make = function (tableName, datas, headers, _) {
-    return /* record */[
-            /* debugName */component[/* debugName */0],
-            /* reactClassInternal */component[/* reactClassInternal */1],
-            /* handedOffState */component[/* handedOffState */2],
-            /* willReceiveProps */component[/* willReceiveProps */3],
-            /* didMount */component[/* didMount */4],
-            /* didUpdate */component[/* didUpdate */5],
-            /* willUnmount */component[/* willUnmount */6],
-            /* willUpdate */component[/* willUpdate */7],
-            /* shouldUpdate */component[/* shouldUpdate */8],
-            /* render */(function () {
-                var bodyRows = $$Array.of_list(List.map(Curry._1(T[/* render */1], headers), datas));
-                var headerRow = $$Array.of_list(List.map(T[/* renderHeader */0], headers));
-                return React.createElement("table", {
-                            name: tableName
-                          }, React.createElement("thead", undefined, React.createElement("tr", undefined, headerRow)), React.createElement("tbody", undefined, bodyRows));
-              }),
-            /* initialState */component[/* initialState */10],
-            /* retainedProps */component[/* retainedProps */11],
-            /* reducer */component[/* reducer */12],
-            /* subscriptions */component[/* subscriptions */13],
-            /* jsElementWrapped */component[/* jsElementWrapped */14]
-          ];
-  };
-  return /* module */[/* make */make];
-}
-
-function render(headers, data) {
-  var row = $$Array.of_list(List.map((function (header) {
-              if (header) {
-                return React.createElement("td", undefined, React.createElement("div", undefined, data[/* text */0]));
-              } else {
-                return React.createElement("td", undefined, React.createElement("div", undefined, data[/* id */1]));
-              }
-            }), headers));
-  return React.createElement("tr", undefined, row);
-}
-
-function renderHeader(header) {
-  if (header) {
-    return React.createElement("th", undefined, "Name");
-  } else {
-    return React.createElement("th", undefined, "ID");
-  }
-}
-
-var TodoTableDefine = /* module */[
-  /* render */render,
-  /* renderHeader */renderHeader
-];
-
-function make(tableName, datas, headers, _) {
+function make$1(datas, headerColumns, row, header, footer, tableName, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -74,13 +27,12 @@ function make(tableName, datas, headers, _) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function () {
-              var bodyRows = $$Array.of_list(List.map((function (param) {
-                          return render(headers, param);
-                        }), datas));
-              var headerRow = $$Array.of_list(List.map(renderHeader, headers));
+              var bodyRows = $$Array.of_list(List.map(Curry._1(row, headerColumns), datas));
+              var header$1 = Curry._1(header, headerColumns);
+              var footer$1 = Curry._1(footer, headerColumns);
               return React.createElement("table", {
                           name: tableName
-                        }, React.createElement("thead", undefined, React.createElement("tr", undefined, headerRow)), React.createElement("tbody", undefined, bodyRows));
+                        }, React.createElement("thead", undefined, header$1), React.createElement("tbody", undefined, bodyRows), React.createElement("tfoot", undefined, footer$1));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],
@@ -90,14 +42,42 @@ function make(tableName, datas, headers, _) {
         ];
 }
 
-var TodoTable = /* module */[/* make */make];
+var Table = /* module */[/* make */make$1];
+
+function renderRow(headers, data) {
+  var row = $$Array.of_list(List.map((function (header) {
+              if (header) {
+                return React.createElement("td", undefined, React.createElement("div", undefined, data[/* text */0]));
+              } else {
+                return React.createElement("td", undefined, React.createElement("div", undefined, data[/* id */1]));
+              }
+            }), headers));
+  return React.createElement("tr", undefined, row);
+}
+
+function renderHeader(headers) {
+  return ReasonReact.element(undefined, undefined, make(/* array */[$$Array.of_list(List.map((function (header) {
+                              if (header) {
+                                return React.createElement("th", undefined, "Name");
+                              } else {
+                                return React.createElement("th", undefined, "ID");
+                              }
+                            }), headers))]));
+}
+
+function renderFooter(headers) {
+  return ReasonReact.element(undefined, undefined, make(/* array */[React.createElement("tr", undefined, $$Array.of_list(List.map((function () {
+                                  return React.createElement("td", undefined);
+                                }), headers)))]));
+}
 
 var TableSample = /* module */[
-  /* TodoTableDefine */TodoTableDefine,
-  /* TodoTable */TodoTable
+  /* renderRow */renderRow,
+  /* renderHeader */renderHeader,
+  /* renderFooter */renderFooter
 ];
 
-ReasonReact.element(undefined, undefined, make("todoTable", /* :: */[
+ReasonReact.element(undefined, undefined, make$1(/* :: */[
           /* record */[
             /* text */"",
             /* id */"id"
@@ -109,8 +89,9 @@ ReasonReact.element(undefined, undefined, make("todoTable", /* :: */[
             /* Name */1,
             /* [] */0
           ]
-        ], /* array */[]));
+        ], renderRow, renderHeader, renderFooter, "todoTable", /* array */[]));
 
+exports.Fragment = Fragment;
 exports.component = component;
 exports.Table = Table;
 exports.TableSample = TableSample;
