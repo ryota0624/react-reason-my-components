@@ -14,6 +14,6 @@ module Cat = {
   let groupName = "Cat"
 }
 
-let c = cat(~weight=100.0, ~height=100.0, ~pattern=1);
+let c:cat = cat(~weight=100.0, ~height=100.0, ~pattern=1);
 
 module CatBook = AnimalBook.AnimalBook(Cat);

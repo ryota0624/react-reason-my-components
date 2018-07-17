@@ -5,9 +5,9 @@ module type Animal = {
   let groupName: string; 
 };
 
-[@bs.deriving abstract]
 type animal('d) = {
   ..
   weight: float,
   height: float,
+  getLabel: (unit) => string,
 } as 'd;
