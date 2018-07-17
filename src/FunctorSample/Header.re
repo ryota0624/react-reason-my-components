@@ -7,7 +7,7 @@ let getWidthSize = size => {
   | Large => 12.0
   | Free(size) => size
   };
-}
+};
 
 type reportHeaderItemColumn = A | B | C | D | E | F;
 
@@ -30,21 +30,32 @@ let headerItemWidthDefaultSize = (item) => switch item {
 | Report(rhI) => reportHeaderItemWidthDefaultSize(rhI)
 };
 
+[@bs.deriving jsConverter]
 type headerItem = {
     column: headerItemColumn,
-    mutable size: headerColumnSize,
+    size: headerColumnSize,
     isSizeFiexed: bool
   };
 
 let getHeaderItemWidthSize = headerItem => headerItem.size |> getWidthSize;
 
-type header = list(headerItem);
+let headerItemFromAny = (headerItem) => headerItem |> headerItemToJs |> Obj.magic |> Js.Json.stringify;
+let anyToHeaderItem = (anyString) => anyString |> Js.Json.parseExn |> Obj.magic |> headerItemFromJs;
 
+let valueToString = (func, value) => value |> func |> Obj.magic |> Js.Json.stringify;
+let stringFromValue = (func, anyString) => anyString |> Js.Json.parseExn |> Obj.magic |> func;
+
+type header = list(headerItem);
 let getWidthSizeByTableWidthSize = (tableWidthSize, header) => {
   let headerSizeList= header |> List.map(getHeaderItemWidthSize);
   let totalHeaderSize = headerSizeList |> List.fold_left((+.), 0.0);
-  if (tableWidthSize < totalHeaderSize) {
-    let flexibleSizeHeaderCount = header |> List.filter(header => !header.isSizeFiexed) |> List.length |> float_of_int;
+  if (tableWidthSize > totalHeaderSize) {
+    let flexibleSizeHeaderCount = 
+      header 
+        |> List.filter(header => !header.isSizeFiexed) 
+        |> List.length 
+        |> float_of_int;
+    
     let totalSizeFiexedWidth = header 
       |> List.filter(header => header.isSizeFiexed) 
       |> List.map(getHeaderItemWidthSize)
@@ -52,10 +63,30 @@ let getWidthSizeByTableWidthSize = (tableWidthSize, header) => {
 
     let headerSize = (tableWidthSize -. totalSizeFiexedWidth) /. flexibleSizeHeaderCount;
     header |> List.map (headerItem => {
-      headerItem.size = Free(headerSize);
-      headerItem;
+      {...headerItem, size: Free(headerSize)};
     })
   } else {
     header;
   }
+};
+
+Js.Console.log({
+  column: Name,
+  size: Free(100.0),
+  isSizeFiexed: false,
+} |> valueToString(headerItemToJs)
+  |> stringFromValue(headerItemFromJs) 
+  |> (item => [item]) 
+  |> getWidthSizeByTableWidthSize(1000.0));
+
+
+let () = {
+  let v = {
+    column: Name,
+    size: Free(100.0),
+    isSizeFiexed: false,
+  } |> valueToString(headerItemToJs)
+    |> stringFromValue(headerItemFromJs);
+
+  Js.Console.log(v.size|> getWidthSize);
 }
