@@ -6,14 +6,21 @@ type cat = {
   pattern: int,
 };
 
+type animal +=
+  | Cat(cat);
 
-module Cat = {
+module CatFun = {
   type t = cat;
-  let height = t => t.height;
-  let weight = t => t.weight;
-  let groupName = "Cat"
-}
+  let make = cat => Cat(cat);
+  let height = t =>
+    switch (t) {
+    | Cat(cat) => cat.height
+    };
+  let weight = t =>
+    switch (t) {
+    | Cat(cat) => cat.height
+    };
+  let groupName = "Cat";
+};
 
-let c:cat = { weight: 100.0, height: 100.0, pattern: 1 };
-
-module CatBook = AnimalBook.AnimalBook(Cat);
+let c = CatFun.make({weight: 100.0, height: 100.0, pattern: 1});

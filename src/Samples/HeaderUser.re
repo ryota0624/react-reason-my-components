@@ -1,8 +1,9 @@
 open ReportHeader;
 
-type headerTag = UserHeader;
+type headerTag =
+  | UserHeader;
 type reportHeaderItemColumn('headerTag) +=
-  Id
+  | Id
   | Name
   | Age
   | Gender;

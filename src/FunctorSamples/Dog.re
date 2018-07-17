@@ -1,20 +1,25 @@
 open Animal;
-open AnimalBook;
-
 type dog = {
   height: float,
   weight: float,
   pattern: int,
 };
 
+type animal +=
+  | Dog(dog);
 
-
-
-module Dog = {
+module DogFun = {
   type t = dog;
-  let height = t => t.height;
-  let weight = t => t.weight;
-  let groupName = "Dog"
-}
+  let make = dog => Dog(dog);
+  let height = t =>
+    switch (t) {
+    | Dog(dog) => dog.height
+    };
+  let weight = t =>
+    switch (t) {
+    | Dog(dog) => dog.height
+    };
+  let groupName = "Dog";
+};
 
-module DogBook = AnimalBook(Dog);
+let d = DogFun.make({weight: 500.0, height: 500.0, pattern: 1});

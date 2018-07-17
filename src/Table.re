@@ -57,8 +57,7 @@ module TableSample = {
       |> List.map(header =>
            switch (header) {
            | ID => <td> <div> (data.id |> ReasonReact.string) </div> </td>
-           | Name =>
-             <td> <div> (data.text |> ReasonReact.string) </div> </td>
+           | Name => <td> <div> (data.text |> ReasonReact.string) </div> </td>
            }
          )
       |> Array.of_list
@@ -105,9 +104,9 @@ let () = {
       tableName="todoTable"
       datas=[todo]
       headerColumns=[ID, Name]
-      row=(TableSample.renderRow)
-      footer=(TableSample.renderFooter)
-      header=(TableSample.renderHeader)
+      row=TableSample.renderRow
+      footer=TableSample.renderFooter
+      header=TableSample.renderHeader
     />;
   ();
 };

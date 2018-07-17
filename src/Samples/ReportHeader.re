@@ -28,7 +28,6 @@ type headerItem('t) = {
   isSizeFiexed: bool,
 };
 
-
 let getHeaderItemWidthSize = headerItem => headerItem.size |> getWidthSize;
 
 let valueToString = (func, value) =>

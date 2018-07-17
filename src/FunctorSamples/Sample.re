@@ -2,13 +2,11 @@ open Animal;
 open Dog;
 open Cat;
 
-type animalType = Cat(animal, cat) | Dog(animal, dog);
+let showAnimalSizeText = animal =>
+  switch (animal) {
+  | Dog(dog) => DogFun.height(animal)
+  | Cat(cat) => CatFun.height(animal)
+  };
 
-
-type c = D;
-
-let showAnimalSizeText = (animalType) => {
-   let Cat(animal, _) | Dog(animal, _) = animalType;
-   animal.weight
-}
-
+Js.Console.log(showAnimalSizeText(d));
+Js.Console.log(showAnimalSizeText(c));

@@ -1,7 +1,7 @@
 open ReportHeader;
 
 type reportHeaderItemColumn('t) +=
-  Id
+  | Id
   | Name
   | Author
   | CreatedAt;
