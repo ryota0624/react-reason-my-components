@@ -5,9 +5,7 @@ module type Animal = {
   let groupName: string; 
 };
 
-type animal('d) = {
-  ..
+type animal = {
   weight: float,
   height: float,
-  getLabel: (unit) => string,
-} as 'd;
+}

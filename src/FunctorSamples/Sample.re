@@ -1,12 +1,14 @@
 open Animal;
+open Dog;
+open Cat;
 
-/* type animalType = Cat(cat) | Dog(dog); */
+type animalType = Cat(animal, cat) | Dog(animal, dog);
 
+
+type c = D;
 
 let showAnimalSizeText = (animalType) => {
-  /* let Cat(animal) | Dog(animal) = animalType; */
-
-  Js.Console.log(animalType#getLabel());
+   let Cat(animal, _) | Dog(animal, _) = animalType;
+   animal.weight
 }
 
-let catText = showAnimalSizeText(Dog.make(~height = 100.0, ~weight = 10.0 , ~pattern = 3));

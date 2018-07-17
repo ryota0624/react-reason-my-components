@@ -4,11 +4,11 @@
 var AnimalBook$ReactTemplate = require("./AnimalBook.bs.js");
 
 function height(t) {
-  return t.height;
+  return t[/* height */0];
 }
 
 function weight(t) {
-  return t.weight;
+  return t[/* weight */1];
 }
 
 var groupName = "Cat";
@@ -19,17 +19,17 @@ var Cat = /* module */[
   /* groupName */groupName
 ];
 
-var c = {
-  height: 100.0,
-  weight: 100.0,
-  pattern: 1
-};
-
 var CatBook = AnimalBook$ReactTemplate.AnimalBook([
       weight,
       height,
       groupName
     ]);
+
+var c = /* record */[
+  /* height */100.0,
+  /* weight */100.0,
+  /* pattern */1
+];
 
 exports.Cat = Cat;
 exports.c = c;
