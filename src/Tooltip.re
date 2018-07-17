@@ -52,11 +52,11 @@ let make = (~position, ~size, ~text: string, ~parent, _children) => {
           "data-balloon-length": sizeToAttrString(size),
           "data-balloon": text,
           "data-balloon-pos": positionToAttrString(position),
-          "onMouseOver": (_ => self.send(Open)),
-          "onMouseLeave": (_ => self.send(Close))
+          "onMouseOver": _ => self.send(Open),
+          "onMouseLeave": _ => self.send(Close),
         },
         [||],
       );
-      tooltip
+    tooltip;
   },
 };
