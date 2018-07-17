@@ -1,10 +1,11 @@
-type animal = ..;
+open Cat;
+open Dog;
 
-module type Animal = {
-  type t;
-  let make: t => animal;
-  let getAnimal: animal => t;
-  let weight: animal => float;
-  let height: animal => float;
-  let groupName: string;
-};
+type animalCharacter = Cat(cat) | Dog(dog);
+
+type animalA = {
+  name: string,
+  height: float,
+  weight: float,
+  character: animalCharacter
+}

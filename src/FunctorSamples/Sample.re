@@ -2,11 +2,10 @@ open Animal;
 open Dog;
 open Cat;
 
-let showAnimalSizeText = animal =>
+let showAnimalCharacterInfo = animal =>
   switch (animal) {
-  | Dog(dog) => DogFun.height(animal)
-  | Cat(cat) => CatFun.height(animal)
+  | Dog(dog) => dog.skill
+  | Cat(cat) => cat.pattern |> string_of_int
   };
 
-Js.Console.log(showAnimalSizeText(d));
-Js.Console.log(showAnimalSizeText(c));
+let showAnimalHeight = animal => animal.height;  
