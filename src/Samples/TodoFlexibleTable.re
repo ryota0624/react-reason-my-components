@@ -70,30 +70,15 @@ let renderHeader = headers =>
   </tr>;
 
 let renderFooter = _ => ReasonReact.null;
-/* <Fragment>
-     <tr>
-       (
-         headers
-         |> List.map(header =>
-              switch (header.column) {
-              | ID => <td  />
-              | Name => <td />
-              }
-            )
-         |> Array.of_list
-         |> ReasonReact.array
-       )
-     </tr>
-   </Fragment>; */
 
 module TodoTableDef = {
   type column = todoHeader;
   type relationDataType = todo;
   type header = headerItem(column);
   type cell = tableCell(column);
-  let dataRowStyle = (headers, data) => "";
-  let headerRowStyle = headers => "";
-  let footerRowStyle = headers => "";
+  let dataRowStyle = (_, _) => "";
+  let headerRowStyle = _ => "";
+  let footerRowStyle = _ => "";
   let defaultHeader = header =>
     switch (header) {
     | ID => {column: ID, size: Free(200.0), isSizeFixed: false}
