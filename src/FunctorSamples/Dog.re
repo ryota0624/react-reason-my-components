@@ -1,3 +1,1 @@
-type dog = {
-  skill: string,
-};
+type dog = {skill: string};

@@ -69,6 +69,14 @@ function getWidthSizeByTableWidthSize(tableWidthSize, header) {
                           /* isSizeFixed */headerItem[/* isSizeFixed */2]
                         ];
                 }), header);
+  } else if (tableWidthSize === 0.0) {
+    return List.map((function (headerItem) {
+                  return /* record */[
+                          /* column */headerItem[/* column */0],
+                          /* size : Free */[0.0],
+                          /* isSizeFixed */headerItem[/* isSizeFixed */2]
+                        ];
+                }), header);
   } else {
     return header;
   }

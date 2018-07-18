@@ -8,4 +8,4 @@ let showAnimalCharacterInfo = animal =>
   | Cat(cat) => cat.pattern |> string_of_int
   };
 
-let showAnimalHeight = animal => animal.height;  
+let showAnimalHeight = animal => animal.height;

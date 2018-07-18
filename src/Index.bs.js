@@ -6,9 +6,10 @@ var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Tooltip$ReactTemplate = require("./Tooltip.bs.js");
 var ModalSample$ReactTemplate = require("./ModalSample.bs.js");
+var TodoFlexibleTable$ReactTemplate = require("./Samples/TodoFlexibleTable.bs.js");
 
 ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonReact.element(undefined, undefined, Tooltip$ReactTemplate.make(/* Down */2, /* Large */2, "IAM TOOLTIP", React.createElement("button", {
                       className: "target"
-                    }, "HELLO"), /* array */[])), ReasonReact.element(undefined, undefined, ModalSample$ReactTemplate.make(/* array */[]))), "index");
+                    }, "HELLO"), /* array */[])), ReasonReact.element(undefined, undefined, TodoFlexibleTable$ReactTemplate.TodoTableSample[/* make */3](/* array */[])), ReasonReact.element(undefined, undefined, ModalSample$ReactTemplate.make(/* array */[]))), "index");
 
 /*  Not a pure module */

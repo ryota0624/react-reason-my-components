@@ -19,7 +19,6 @@ type headerItem('t) = {
   isSizeFixed: bool,
 };
 
-
 let valueToString = (func, value) =>
   value |> func |> Obj.magic |> Js.Json.stringify;
 let stringFromValue = (func, anyString) =>
@@ -46,6 +45,8 @@ let getWidthSizeByTableWidthSize = (tableWidthSize, header) => {
     let headerSize =
       (tableWidthSize -. totalSizeFiexedWidth) /. flexibleSizeHeaderCount;
     header |> List.map(headerItem => {...headerItem, size: Free(headerSize)});
+  } else if (tableWidthSize == 0.0) {
+    header |> List.map(headerItem => {...headerItem, size: Free(0.0)});
   } else {
     header;
   };

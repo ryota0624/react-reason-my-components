@@ -1,3 +1,1 @@
-type cat = {
-  pattern: int,
-};
+type cat = {pattern: int};

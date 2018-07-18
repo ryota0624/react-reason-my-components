@@ -8,6 +8,7 @@ ReactDOMRe.renderToElementWithId(
         <button className="target"> (ReasonReact.string("HELLO")) </button>
       }
     />
+    <TodoFlexibleTable.TodoTableSample />
     <ModalSample />
   </div>,
   "index",
