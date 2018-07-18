@@ -2,7 +2,6 @@
 'use strict';
 
 var Caml_exceptions = require("bs-platform/lib/js/caml_exceptions.js");
-var ReportHeader$ReactTemplate = require("./ReportHeader.bs.js");
 
 var Id = Caml_exceptions.create("HeaderUser-ReactTemplate.Id");
 
@@ -12,17 +11,8 @@ var Age = Caml_exceptions.create("HeaderUser-ReactTemplate.Age");
 
 var Gender = Caml_exceptions.create("HeaderUser-ReactTemplate.Gender");
 
-console.log(ReportHeader$ReactTemplate.getWidthSizeByTableWidthSize(1000.0, /* :: */[
-          ReportHeader$ReactTemplate.stringFromValue(ReportHeader$ReactTemplate.headerItemFromJs, ReportHeader$ReactTemplate.valueToString(ReportHeader$ReactTemplate.headerItemToJs, /* record */[
-                    /* column */Name,
-                    /* size : Free */[1500.0],
-                    /* isSizeFiexed */false
-                  ])),
-          /* [] */0
-        ]));
-
 exports.Id = Id;
 exports.Name = Name;
 exports.Age = Age;
 exports.Gender = Gender;
-/*  Not a pure module */
+/* No side effect */
