@@ -1,8 +1,7 @@
+
 type validator('e, 's) = Validator ('s => list('e));
 
-let fromErrors = (getSubject, getErrors: 's => list('e)) => {
-  Validator(getSubject @@ getErrors)
-};
+let fromErrors = (getErrors: 'subject => list('e)): validator('e, 'subject) =>  Validator(getErrors);
 
 let all = (validators: list(validator('e, 's))): validator('e, 's) => {
   let allGetErrors = validators 
