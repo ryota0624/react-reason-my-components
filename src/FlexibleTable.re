@@ -83,7 +83,7 @@ module FlexibleTable = (T: TableDef) => {
         ~header: list(T.cell) => ReasonReact.reactElement,
         ~footer: list(T.cell) => ReasonReact.reactElement,
         ~tableClassName: string,
-        _chiildren,
+        _children,
       ) => {
     ...component,
     initialState: () => {tableWidth: 0.0, tableDom: None},
