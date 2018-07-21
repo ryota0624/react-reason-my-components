@@ -1,13 +1,12 @@
+type result('v, 'e) =
+  | Success('v)
+  | Failure('e);
 
-type result('v, 'e) = Success('v) | Failure('e);
-
-module type PromiseWrapperDef = {
-  type v;
-};
+module type PromiseWrapperDef = {type v;};
 module PromiseWrapper = (D: PromiseWrapperDef) => {
   include Js.Promise;
 
-  type action = 
+  type action =
     | Completed(D.v)
     | Error(Js.Promise.error);
 
@@ -15,40 +14,38 @@ module PromiseWrapper = (D: PromiseWrapperDef) => {
 
   let component = ReasonReact.reducerComponent("PromiseWrapper");
 
-  let make = (
-    ~promise: Js.Promise.t(D.v),
-    ~whenSuccess: 'v => ReasonReact.reactElement, 
-    ~whenError, 
-    ~whenPending, 
-    _children
-    ) => {
+  let make =
+      (
+        ~promise: Js.Promise.t(D.v),
+        ~whenSuccess: 'v => ReasonReact.reactElement,
+        ~whenError,
+        ~whenPending,
+        _children,
+      ) => {
     ...component,
     initialState: () => None,
-    reducer: (action, _) => 
+    reducer: (action, _) =>
       switch (action) {
-      | Completed(value) => 
+      | Completed(value) =>
         let state = Some(Success(value));
-        ReasonReact.Update(state)
-      | Error(e) => 
+        ReasonReact.Update(state);
+      | Error(e) =>
         let state = Some(Failure(e));
-        ReasonReact.Update(state)
-      }
-    ,
-    didMount: (self) => {
-        promise
-          |> then_(value => resolve(self.send(Completed(value))))
-          |> catch(error => resolve(self.send(Error(error))))
-          |> ignore
-    },
-    render: (self) => {
+        ReasonReact.Update(state);
+      },
+    didMount: self =>
+      promise
+      |> then_(value => resolve(self.send(Completed(value))))
+      |> catch(error => resolve(self.send(Error(error))))
+      |> ignore,
+    render: self =>
       switch (self.state) {
       | None => whenPending
-      | Some(result) => 
+      | Some(result) =>
         switch (result) {
         | Success(value) => whenSuccess(value)
         | Failure(e) => whenError(e)
-        };
-      };
-    }
+        }
+      },
   };
-}
+};

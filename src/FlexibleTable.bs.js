@@ -14,7 +14,7 @@ function make(children) {
   return ReasonReact.wrapJsForReason(React.Fragment, { }, children);
 }
 
-var Fragment = /* module */[/* make */make];
+var Fragment = /* module */Block.localModule(["make"], [make]);
 
 function FlexibleTable(T) {
   var defaultHeaders = function (headerColumns) {
@@ -22,12 +22,15 @@ function FlexibleTable(T) {
   };
   var headerItemToCell = function (header) {
     var width = FlexibleTableHeader$ReactTemplate.getWidthSize(header[/* size */1]);
-    return /* record */[
-            /* column */header[/* column */0],
-            /* style */{
-              width: "" + (String(width) + ("" + (String("px") + "")))
-            }
-          ];
+    return /* record */Block.record([
+              "column",
+              "style"
+            ], [
+              header[/* column */0],
+              {
+                width: "" + (String(width) + ("" + (String("px") + "")))
+              }
+            ]);
   };
   var apperTable = function (theRef, param) {
     var send = param[/* send */3];
@@ -35,7 +38,7 @@ function FlexibleTable(T) {
     var tableDomToAction = function (tableDom) {
       var tableWidth = tableDom.clientWidth;
       if (tableWidth !== state[/* tableWidth */0]) {
-        return Curry._1(send, /* DetectedTableSize */[tableWidth]);
+        return Curry._1(send, /* DetectedTableSize */Block.simpleVariant("DetectedTableSize", [tableWidth]));
       } else {
         return 0;
       }
@@ -57,50 +60,78 @@ function FlexibleTable(T) {
   };
   var component = ReasonReact.reducerComponent("FlexibleTable");
   var make = function (datas, headerItems, row, header, footer, tableClassName, _) {
-    return /* record */[
-            /* debugName */component[/* debugName */0],
-            /* reactClassInternal */component[/* reactClassInternal */1],
-            /* handedOffState */component[/* handedOffState */2],
-            /* willReceiveProps */component[/* willReceiveProps */3],
-            /* didMount */component[/* didMount */4],
-            /* didUpdate */component[/* didUpdate */5],
-            /* willUnmount */component[/* willUnmount */6],
-            /* willUpdate */component[/* willUpdate */7],
-            /* shouldUpdate */component[/* shouldUpdate */8],
-            /* render */(function (self) {
-                var cells = List.map(headerItemToCell, FlexibleTableHeader$ReactTemplate.getWidthSizeByTableWidthSize(self[/* state */1][/* tableWidth */0], headerItems));
-                var bodyRows = $$Array.of_list(List.map(Curry._1(row, cells), datas));
-                var header$1 = Curry._1(header, cells);
-                var footer$1 = Curry._1(footer, cells);
-                return React.createElement("table", {
-                            ref: Curry._1(self[/* handle */0], apperTable),
-                            className: tableClassName
-                          }, React.createElement("thead", undefined, header$1), React.createElement("tbody", undefined, bodyRows), React.createElement("tfoot", undefined, footer$1));
-              }),
-            /* initialState */(function () {
-                return /* record */[
-                        /* tableWidth */0.0,
-                        /* tableDom */undefined
-                      ];
-              }),
-            /* retainedProps */component[/* retainedProps */11],
-            /* reducer */(function (action, state) {
-                return /* Update */Block.__(0, [/* record */[
-                            /* tableWidth */action[0],
-                            /* tableDom */state[/* tableDom */1]
-                          ]]);
-              }),
-            /* subscriptions */component[/* subscriptions */13],
-            /* jsElementWrapped */component[/* jsElementWrapped */14]
-          ];
+    return /* record */Block.record([
+              "debugName",
+              "reactClassInternal",
+              "handedOffState",
+              "willReceiveProps",
+              "didMount",
+              "didUpdate",
+              "willUnmount",
+              "willUpdate",
+              "shouldUpdate",
+              "render",
+              "initialState",
+              "retainedProps",
+              "reducer",
+              "subscriptions",
+              "jsElementWrapped"
+            ], [
+              component[/* debugName */0],
+              component[/* reactClassInternal */1],
+              component[/* handedOffState */2],
+              component[/* willReceiveProps */3],
+              component[/* didMount */4],
+              component[/* didUpdate */5],
+              component[/* willUnmount */6],
+              component[/* willUpdate */7],
+              component[/* shouldUpdate */8],
+              (function (self) {
+                  var cells = List.map(headerItemToCell, FlexibleTableHeader$ReactTemplate.getWidthSizeByTableWidthSize(self[/* state */1][/* tableWidth */0], headerItems));
+                  var bodyRows = $$Array.of_list(List.map(Curry._1(row, cells), datas));
+                  var header$1 = Curry._1(header, cells);
+                  var footer$1 = Curry._1(footer, cells);
+                  return React.createElement("table", {
+                              ref: Curry._1(self[/* handle */0], apperTable),
+                              className: tableClassName
+                            }, React.createElement("thead", undefined, header$1), React.createElement("tbody", undefined, bodyRows), React.createElement("tfoot", undefined, footer$1));
+                }),
+              (function () {
+                  return /* record */Block.record([
+                            "tableWidth",
+                            "tableDom"
+                          ], [
+                            0.0,
+                            undefined
+                          ]);
+                }),
+              component[/* retainedProps */11],
+              (function (action, state) {
+                  return /* Update */Block.variant("Update", 0, [/* record */Block.record([
+                                "tableWidth",
+                                "tableDom"
+                              ], [
+                                action[0],
+                                state[/* tableDom */1]
+                              ])]);
+                }),
+              component[/* subscriptions */13],
+              component[/* jsElementWrapped */14]
+            ]);
   };
-  return /* module */[
-          /* defaultHeaders */defaultHeaders,
-          /* headerItemToCell */headerItemToCell,
-          /* apperTable */apperTable,
-          /* component */component,
-          /* make */make
-        ];
+  return /* module */Block.localModule([
+            "defaultHeaders",
+            "headerItemToCell",
+            "apperTable",
+            "component",
+            "make"
+          ], [
+            defaultHeaders,
+            headerItemToCell,
+            apperTable,
+            component,
+            make
+          ]);
 }
 
 var getWidthSize = FlexibleTableHeader$ReactTemplate.getWidthSize;

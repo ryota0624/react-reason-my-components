@@ -10,27 +10,30 @@ function MakePage(Mvu) {
   var update = function (msg, page) {
     var tup = Curry._2(Mvu[/* update */0], msg, page[/* model */0]);
     return /* tuple */[
-            /* record */[/* model */tup[0]],
+            /* record */Block.record(["model"], [tup[0]]),
             tup[1]
           ];
   };
   var init = function (seed) {
-    return /* record */[/* model */Curry._1(Mvu[/* init */1], seed)];
+    return /* record */Block.record(["model"], [Curry._1(Mvu[/* init */1], seed)]);
   };
-  return /* module */[
-          /* update */update,
-          /* init */init
-        ];
+  return /* module */Block.localModule([
+            "update",
+            "init"
+          ], [
+            update,
+            init
+          ]);
 }
 
 function update(msg, model) {
   switch (msg.tag | 0) {
     case 0 : 
         return /* tuple */[
-                List.append(/* :: */[
-                      msg[0],
-                      /* [] */0
-                    ], model),
+                List.append(/* :: */Block.simpleVariant("::", [
+                        msg[0],
+                        /* [] */0
+                      ]), model),
                 /* [] */0
               ];
     case 1 : 
@@ -51,44 +54,53 @@ function update(msg, model) {
 }
 
 function init(seed) {
-  return /* :: */[
-          seed,
-          /* [] */0
-        ];
+  return /* :: */Block.simpleVariant("::", [
+            seed,
+            /* [] */0
+          ]);
 }
 
-var TodoMvu = /* module */[
-  /* update */update,
-  /* init */init
-];
+var TodoMvu = /* module */Block.localModule([
+    "update",
+    "init"
+  ], [
+    update,
+    init
+  ]);
 
 function update$1(msg, page) {
   var tup = update(msg, page[/* model */0]);
   return /* tuple */[
-          /* record */[/* model */tup[0]],
+          /* record */Block.record(["model"], [tup[0]]),
           tup[1]
         ];
 }
 
 function init$1(seed) {
-  return /* record */[/* model : :: */[
-            seed,
-            /* [] */0
-          ]];
+  return /* record */Block.record(["model"], [Block.simpleVariant("::", [
+                seed,
+                /* [] */0
+              ])]);
 }
 
-var TodoPage = /* module */[
-  /* update */update$1,
-  /* init */init$1
-];
+var TodoPage = /* module */Block.localModule([
+    "update",
+    "init"
+  ], [
+    update$1,
+    init$1
+  ]);
 
-var todoPage = /* record */[/* model : :: */[
-    /* record */[
-      /* id : Id */[""],
-      /* title */"nama"
-    ],
-    /* [] */0
-  ]];
+var todoPage = /* record */Block.record(["model"], [Block.simpleVariant("::", [
+        /* record */Block.record([
+            "id",
+            "title"
+          ], [
+            Block.simpleVariant("Id", [""]),
+            "nama"
+          ]),
+        /* [] */0
+      ])]);
 
 var a = todoPage[/* model */0];
 
@@ -96,7 +108,7 @@ var headTodo = List.hd(a);
 
 var headTitleTodo = headTodo[/* title */1];
 
-var match = update$1(/* DeteteTodo */Block.__(2, [/* Id */[""]]), todoPage);
+var match = update$1(/* DeteteTodo */Block.variant("DeteteTodo", 2, [/* Id */Block.simpleVariant("Id", [""])]), todoPage);
 
 var promises = match[1];
 

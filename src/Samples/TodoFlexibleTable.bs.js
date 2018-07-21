@@ -89,130 +89,186 @@ function footerRowStyle() {
 function defaultHeader(header) {
   switch (header) {
     case 0 : 
-        return /* record */[
-                /* column : ID */0,
-                /* size : Free */[200.0],
-                /* isSizeFixed */false
-              ];
+        return /* record */Block.record([
+                  "column",
+                  "size",
+                  "isSizeFixed"
+                ], [
+                  0,
+                  Block.simpleVariant("Free", [200.0]),
+                  false
+                ]);
     case 1 : 
-        return /* record */[
-                /* column : Name */1,
-                /* size : Free */[200.0],
-                /* isSizeFixed */false
-              ];
+        return /* record */Block.record([
+                  "column",
+                  "size",
+                  "isSizeFixed"
+                ], [
+                  1,
+                  Block.simpleVariant("Free", [200.0]),
+                  false
+                ]);
     case 2 : 
-        return /* record */[
-                /* column : Age */2,
-                /* size : Free */[200.0],
-                /* isSizeFixed */false
-              ];
+        return /* record */Block.record([
+                  "column",
+                  "size",
+                  "isSizeFixed"
+                ], [
+                  2,
+                  Block.simpleVariant("Free", [200.0]),
+                  false
+                ]);
     case 3 : 
-        return /* record */[
-                /* column : Hobby */3,
-                /* size : Free */[200.0],
-                /* isSizeFixed */false
-              ];
+        return /* record */Block.record([
+                  "column",
+                  "size",
+                  "isSizeFixed"
+                ], [
+                  3,
+                  Block.simpleVariant("Free", [200.0]),
+                  false
+                ]);
     
   }
 }
 
-var TodoTableDef = /* module */[
-  /* dataRowStyle */dataRowStyle,
-  /* headerRowStyle */headerRowStyle,
-  /* footerRowStyle */footerRowStyle,
-  /* defaultHeader */defaultHeader
-];
+var TodoTableDef = /* module */Block.localModule([
+    "dataRowStyle",
+    "headerRowStyle",
+    "footerRowStyle",
+    "defaultHeader"
+  ], [
+    dataRowStyle,
+    headerRowStyle,
+    footerRowStyle,
+    defaultHeader
+  ]);
 
 var TodoFlexibleTable = FlexibleTable$ReactTemplate.FlexibleTable(TodoTableDef);
 
-var defaultState_000 = /* headerItems */Curry._1(TodoFlexibleTable[/* defaultHeaders */0], /* :: */[
-      /* ID */0,
-      /* :: */[
-        /* Name */1,
-        /* :: */[
-          /* Hobby */3,
-          /* :: */[
-            /* Age */2,
-            /* [] */0
-          ]
-        ]
-      ]
-    ]);
+var defaultState_000 = /* headerItems */Curry._1(TodoFlexibleTable[/* defaultHeaders */0], /* :: */Block.simpleVariant("::", [
+        /* ID */0,
+        /* :: */Block.simpleVariant("::", [
+            /* Name */1,
+            /* :: */Block.simpleVariant("::", [
+                /* Hobby */3,
+                /* :: */Block.simpleVariant("::", [
+                    /* Age */2,
+                    /* [] */0
+                  ])
+              ])
+          ])
+      ]));
 
-var defaultState = /* record */[
-  defaultState_000,
-  /* tableClassName */"todo-table"
-];
+var defaultState = /* record */Block.record([
+    "headerItems",
+    "tableClassName"
+  ], [
+    defaultState_000,
+    "todo-table"
+  ]);
 
-var todo = /* record */[
-  /* text */"hy!",
-  /* id */"id",
-  /* age */20,
-  /* hobby */"hobty"
-];
+var todo = /* record */Block.record([
+    "text",
+    "id",
+    "age",
+    "hobby"
+  ], [
+    "hy!",
+    "id",
+    20,
+    "hobty"
+  ]);
 
 var component = ReasonReact.reducerComponent("TodoTableContainer");
 
 function make() {
-  return /* record */[
-          /* debugName */component[/* debugName */0],
-          /* reactClassInternal */component[/* reactClassInternal */1],
-          /* handedOffState */component[/* handedOffState */2],
-          /* willReceiveProps */component[/* willReceiveProps */3],
-          /* didMount */(function (self) {
-              setTimeout((function () {
-                      return Curry._1(self[/* send */3], /* ExtendTable */1);
-                    }), 3000);
-              return /* () */0;
-            }),
-          /* didUpdate */component[/* didUpdate */5],
-          /* willUnmount */component[/* willUnmount */6],
-          /* willUpdate */component[/* willUpdate */7],
-          /* shouldUpdate */component[/* shouldUpdate */8],
-          /* render */(function (self) {
-              return ReasonReact.element(undefined, undefined, Curry._7(TodoFlexibleTable[/* make */4], /* :: */[
-                              todo,
-                              /* [] */0
-                            ], self[/* state */1][/* headerItems */0], renderRow, renderHeader, renderFooter, self[/* state */1][/* tableClassName */1], /* array */[]));
-            }),
-          /* initialState */(function () {
-              return defaultState;
-            }),
-          /* retainedProps */component[/* retainedProps */11],
-          /* reducer */(function (action, state) {
-              if (action) {
-                return /* Update */Block.__(0, [/* record */[
-                            /* headerItems */state[/* headerItems */0],
-                            /* tableClassName */"big-todo-table"
-                          ]]);
-              } else {
-                var tmpNextHeaderItems = List.tl(state[/* headerItems */0]);
-                var nextHeaderItems = List.length(tmpNextHeaderItems) < 1 ? defaultState_000 : tmpNextHeaderItems;
-                return /* UpdateWithSideEffects */Block.__(2, [
-                          /* record */[
-                            /* headerItems */nextHeaderItems,
-                            /* tableClassName */state[/* tableClassName */1]
-                          ],
-                          (function (self) {
-                              setTimeout((function () {
-                                      return Curry._1(self[/* send */3], /* DeleteHeader */0);
-                                    }), 1000);
-                              return /* () */0;
-                            })
-                        ]);
-              }
-            }),
-          /* subscriptions */component[/* subscriptions */13],
-          /* jsElementWrapped */component[/* jsElementWrapped */14]
-        ];
+  return /* record */Block.record([
+            "debugName",
+            "reactClassInternal",
+            "handedOffState",
+            "willReceiveProps",
+            "didMount",
+            "didUpdate",
+            "willUnmount",
+            "willUpdate",
+            "shouldUpdate",
+            "render",
+            "initialState",
+            "retainedProps",
+            "reducer",
+            "subscriptions",
+            "jsElementWrapped"
+          ], [
+            component[/* debugName */0],
+            component[/* reactClassInternal */1],
+            component[/* handedOffState */2],
+            component[/* willReceiveProps */3],
+            (function (self) {
+                setTimeout((function () {
+                        return Curry._1(self[/* send */3], /* ExtendTable */1);
+                      }), 3000);
+                return /* () */0;
+              }),
+            component[/* didUpdate */5],
+            component[/* willUnmount */6],
+            component[/* willUpdate */7],
+            component[/* shouldUpdate */8],
+            (function (self) {
+                return ReasonReact.element(undefined, undefined, Curry._7(TodoFlexibleTable[/* make */4], /* :: */Block.simpleVariant("::", [
+                                  todo,
+                                  /* [] */0
+                                ]), self[/* state */1][/* headerItems */0], renderRow, renderHeader, renderFooter, self[/* state */1][/* tableClassName */1], /* array */[]));
+              }),
+            (function () {
+                return defaultState;
+              }),
+            component[/* retainedProps */11],
+            (function (action, state) {
+                if (action) {
+                  return /* Update */Block.variant("Update", 0, [/* record */Block.record([
+                                "headerItems",
+                                "tableClassName"
+                              ], [
+                                state[/* headerItems */0],
+                                "big-todo-table"
+                              ])]);
+                } else {
+                  var tmpNextHeaderItems = List.tl(state[/* headerItems */0]);
+                  var nextHeaderItems = List.length(tmpNextHeaderItems) < 1 ? defaultState_000 : tmpNextHeaderItems;
+                  return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
+                            /* record */Block.record([
+                                "headerItems",
+                                "tableClassName"
+                              ], [
+                                nextHeaderItems,
+                                state[/* tableClassName */1]
+                              ]),
+                            (function (self) {
+                                setTimeout((function () {
+                                        return Curry._1(self[/* send */3], /* DeleteHeader */0);
+                                      }), 1000);
+                                return /* () */0;
+                              })
+                          ]);
+                }
+              }),
+            component[/* subscriptions */13],
+            component[/* jsElementWrapped */14]
+          ]);
 }
 
-var TodoTableSample = /* module */[
-  /* defaultState */defaultState,
-  /* todo */todo,
-  /* component */component,
-  /* make */make
-];
+var TodoTableSample = /* module */Block.localModule([
+    "defaultState",
+    "todo",
+    "component",
+    "make"
+  ], [
+    defaultState,
+    todo,
+    component,
+    make
+  ]);
 
 var getWidthSize = FlexibleTable$ReactTemplate.getWidthSize;
 

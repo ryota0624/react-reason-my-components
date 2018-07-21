@@ -2,12 +2,13 @@
 'use strict';
 
 var List = require("bs-platform/lib/js/list.js");
+var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Js_exn = require("bs-platform/lib/js/js_exn.js");
 var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 
 function fromErrors(getErrors) {
-  return /* Validator */[getErrors];
+  return /* Validator */Block.simpleVariant("Validator", [getErrors]);
 }
 
 function all(validators) {
@@ -19,7 +20,7 @@ function all(validators) {
                       return Curry._1(getError, subject);
                     }), allGetErrors));
   };
-  return /* Validator */[validateLogic];
+  return /* Validator */Block.simpleVariant("Validator", [validateLogic]);
 }
 
 function first(validators) {
@@ -37,7 +38,7 @@ function first(validators) {
       }
     }
   };
-  return /* Validator */[validateLogic];
+  return /* Validator */Block.simpleVariant("Validator", [validateLogic]);
 }
 
 exports.fromErrors = fromErrors;

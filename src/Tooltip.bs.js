@@ -39,43 +39,59 @@ function sizeToAttrString(size) {
 var component = ReasonReact.reducerComponent("TooltipComponent");
 
 function make(position, size, text, parent, _) {
-  return /* record */[
-          /* debugName */component[/* debugName */0],
-          /* reactClassInternal */component[/* reactClassInternal */1],
-          /* handedOffState */component[/* handedOffState */2],
-          /* willReceiveProps */component[/* willReceiveProps */3],
-          /* didMount */component[/* didMount */4],
-          /* didUpdate */component[/* didUpdate */5],
-          /* willUnmount */component[/* willUnmount */6],
-          /* willUpdate */component[/* willUpdate */7],
-          /* shouldUpdate */component[/* shouldUpdate */8],
-          /* render */(function (self) {
-              return React.cloneElement(parent, {
-                          "data-balloon-length": sizeToAttrString(size),
-                          "data-balloon": text,
-                          "data-balloon-pos": positionToAttrString(position),
-                          onMouseOver: (function () {
-                              return Curry._1(self[/* send */3], /* Open */0);
-                            }),
-                          onMouseLeave: (function () {
-                              return Curry._1(self[/* send */3], /* Close */1);
-                            })
-                        });
-            }),
-          /* initialState */(function () {
-              return /* record */[/* isOpen */false];
-            }),
-          /* retainedProps */component[/* retainedProps */11],
-          /* reducer */(function (action, _) {
-              if (action) {
-                return /* Update */Block.__(0, [/* record */[/* isOpen */false]]);
-              } else {
-                return /* Update */Block.__(0, [/* record */[/* isOpen */true]]);
-              }
-            }),
-          /* subscriptions */component[/* subscriptions */13],
-          /* jsElementWrapped */component[/* jsElementWrapped */14]
-        ];
+  return /* record */Block.record([
+            "debugName",
+            "reactClassInternal",
+            "handedOffState",
+            "willReceiveProps",
+            "didMount",
+            "didUpdate",
+            "willUnmount",
+            "willUpdate",
+            "shouldUpdate",
+            "render",
+            "initialState",
+            "retainedProps",
+            "reducer",
+            "subscriptions",
+            "jsElementWrapped"
+          ], [
+            component[/* debugName */0],
+            component[/* reactClassInternal */1],
+            component[/* handedOffState */2],
+            component[/* willReceiveProps */3],
+            component[/* didMount */4],
+            component[/* didUpdate */5],
+            component[/* willUnmount */6],
+            component[/* willUpdate */7],
+            component[/* shouldUpdate */8],
+            (function (self) {
+                return React.cloneElement(parent, {
+                            "data-balloon-length": sizeToAttrString(size),
+                            "data-balloon": text,
+                            "data-balloon-pos": positionToAttrString(position),
+                            onMouseOver: (function () {
+                                return Curry._1(self[/* send */3], /* Open */0);
+                              }),
+                            onMouseLeave: (function () {
+                                return Curry._1(self[/* send */3], /* Close */1);
+                              })
+                          });
+              }),
+            (function () {
+                return /* record */Block.record(["isOpen"], [false]);
+              }),
+            component[/* retainedProps */11],
+            (function (action, _) {
+                if (action) {
+                  return /* Update */Block.variant("Update", 0, [/* record */Block.record(["isOpen"], [false])]);
+                } else {
+                  return /* Update */Block.variant("Update", 0, [/* record */Block.record(["isOpen"], [true])]);
+                }
+              }),
+            component[/* subscriptions */13],
+            component[/* jsElementWrapped */14]
+          ]);
 }
 
 exports.positionToAttrString = positionToAttrString;

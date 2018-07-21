@@ -2,6 +2,7 @@
 'use strict';
 
 var List = require("bs-platform/lib/js/list.js");
+var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 
 function unsubscribe(store, listener, _) {
@@ -12,10 +13,10 @@ function unsubscribe(store, listener, _) {
 }
 
 function subscribe(store, listener) {
-  store[/* listeners */2] = /* :: */[
-    listener,
-    store[/* listeners */2]
-  ];
+  store[/* listeners */2] = /* :: */Block.simpleVariant("::", [
+      listener,
+      store[/* listeners */2]
+    ]);
   return (function (param) {
       return unsubscribe(store, listener, param);
     });
@@ -33,22 +34,27 @@ function unsubscribeError(store, listener, _) {
 }
 
 function subscribeError(store, listener) {
-  store[/* errorListeners */3] = /* :: */[
-    listener,
-    store[/* errorListeners */3]
-  ];
+  store[/* errorListeners */3] = /* :: */Block.simpleVariant("::", [
+      listener,
+      store[/* errorListeners */3]
+    ]);
   return (function (param) {
       return unsubscribeError(store, listener, param);
     });
 }
 
 function make(reducer, initialState) {
-  return /* record */[
-          /* state */initialState,
-          /* reducer */reducer,
-          /* listeners : [] */0,
-          /* errorListeners : [] */0
-        ];
+  return /* record */Block.record([
+            "state",
+            "reducer",
+            "listeners",
+            "errorListeners"
+          ], [
+            initialState,
+            reducer,
+            0,
+            0
+          ]);
 }
 
 function dispatch(store, action) {
@@ -72,44 +78,61 @@ function dispatch(store, action) {
   return /* () */0;
 }
 
-var Manager = /* module */[
-  /* unsubscribe */unsubscribe,
-  /* subscribe */subscribe,
-  /* getState */getState,
-  /* unsubscribeError */unsubscribeError,
-  /* subscribeError */subscribeError,
-  /* make */make,
-  /* dispatch */dispatch
-];
+var Manager = /* module */Block.localModule([
+    "unsubscribe",
+    "subscribe",
+    "getState",
+    "unsubscribeError",
+    "subscribeError",
+    "make",
+    "dispatch"
+  ], [
+    unsubscribe,
+    subscribe,
+    getState,
+    unsubscribeError,
+    subscribeError,
+    make,
+    dispatch
+  ]);
 
 function reducer(action, state) {
   if (action) {
     return /* tuple */[
-            /* record */[
-              /* value */state[/* value */0] - 1 | 0,
-              /* label */state[/* label */1]
-            ],
+            /* record */Block.record([
+                "value",
+                "label"
+              ], [
+                state[/* value */0] - 1 | 0,
+                state[/* label */1]
+              ]),
             /* [] */0
           ];
   } else {
     var nextValue = state[/* value */0] + 1 | 0;
     return /* tuple */[
-            /* record */[
-              /* value */nextValue,
-              /* label */state[/* label */1]
-            ],
-            nextValue < 100 ? /* :: */[
-                Promise.resolve(/* Increment */0),
-                /* [] */0
-              ] : /* [] */0
+            /* record */Block.record([
+                "value",
+                "label"
+              ], [
+                nextValue,
+                state[/* label */1]
+              ]),
+            nextValue < 100 ? /* :: */Block.simpleVariant("::", [
+                  Promise.resolve(/* Increment */0),
+                  /* [] */0
+                ]) : /* [] */0
           ];
   }
 }
 
-var manager = make(reducer, /* record */[
-      /* value */0,
-      /* label */"_"
-    ]);
+var manager = make(reducer, /* record */Block.record([
+        "value",
+        "label"
+      ], [
+        0,
+        "_"
+      ]));
 
 subscribe(manager, (function () {
         console.log(manager[/* state */0]);

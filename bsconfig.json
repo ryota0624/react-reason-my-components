@@ -7,6 +7,7 @@
   "reason": {
     "react-jsx": 2
   },
+  "bsc-flags": ["-bs-g"],
   "sources": {
     "dir" : "src",
     "subdirs" : true
