@@ -22,6 +22,9 @@ function modalSizeToAttr(size) {
 
 var modalOpenStyle = {
   display: "block",
+  left: "0",
+  position: "fixed",
+  right: "0",
   top: "0",
   visibility: "visible",
   zIndex: "1050",
@@ -32,6 +35,7 @@ var modalOpenStyle = {
 var modalHiddenStyle = {
   bottom: "auto",
   display: "block",
+  position: "fixed",
   top: "-100vh",
   visibility: "hidden",
   zIndex: "1050",
@@ -39,6 +43,18 @@ var modalHiddenStyle = {
   transition: "all 0.5s",
   pointerEvents: "none"
 };
+
+var modalBgStyle = {
+  backgroundColor: "rgba(41, 38, 38, 0.5)",
+  height: "100%",
+  left: "0",
+  position: "fixed",
+  top: "0",
+  width: "100%",
+  zIndex: "1049"
+};
+
+var modalBgHiddenStyle = { };
 
 function make(hidden, size, onClickContentOutside, header, footer, body, _) {
   return /* record */Block.record([
@@ -68,9 +84,10 @@ function make(hidden, size, onClickContentOutside, header, footer, body, _) {
             component[/* willUpdate */7],
             component[/* shouldUpdate */8],
             (function () {
+                var modalClassName = "modal modal-dialog fade modal-dialog-centered " + modalSizeToAttr(size);
                 return ReasonReact.element(undefined, undefined, ReactHelper$ReactTemplate.Fragment[/* make */0](/* array */[
                                 React.createElement("div", {
-                                      className: "modal modal-dialog fade modal-dialog-centered " + modalSizeToAttr(size),
+                                      className: modalClassName,
                                       style: hidden ? modalHiddenStyle : modalOpenStyle,
                                       onClick: (function (prim) {
                                           prim.stopPropagation();
@@ -79,8 +96,8 @@ function make(hidden, size, onClickContentOutside, header, footer, body, _) {
                                     }, React.createElement("div", {
                                           className: "modal-content"
                                         }, ReactHelper$ReactTemplate.option(header), ReactHelper$ReactTemplate.option(body), ReactHelper$ReactTemplate.option(footer))),
-                                React.createElement("div", {
-                                      className: hidden ? "h-bd" : "o-bd",
+                                React.createElement("span", {
+                                      style: hidden ? modalBgHiddenStyle : modalBgStyle,
                                       onClick: (function () {
                                           return ReactHelper$ReactTemplate.optionalHandler(onClickContentOutside);
                                         })
@@ -99,5 +116,7 @@ exports.component = component;
 exports.modalSizeToAttr = modalSizeToAttr;
 exports.modalOpenStyle = modalOpenStyle;
 exports.modalHiddenStyle = modalHiddenStyle;
+exports.modalBgStyle = modalBgStyle;
+exports.modalBgHiddenStyle = modalBgHiddenStyle;
 exports.make = make;
 /* component Not a pure module */
