@@ -22,7 +22,9 @@ function modalSizeToAttr(size) {
 
 var modalOpenStyle = {
   display: "block",
+  top: "0",
   visibility: "visible",
+  zIndex: "1050",
   opacity: "1",
   transition: "all 0.5s"
 };
@@ -32,7 +34,7 @@ var modalHiddenStyle = {
   display: "block",
   top: "-100vh",
   visibility: "hidden",
-  zIndex: "-1",
+  zIndex: "1050",
   opacity: "1",
   transition: "all 0.5s",
   pointerEvents: "none"
@@ -66,23 +68,24 @@ function make(hidden, size, onClickContentOutside, header, footer, body, _) {
             component[/* willUpdate */7],
             component[/* shouldUpdate */8],
             (function () {
-                return React.createElement("div", {
-                            className: "modal" + (
-                              hidden ? " hidden" : " open"
-                            ),
-                            style: hidden ? modalHiddenStyle : modalOpenStyle,
-                            onClick: (function () {
-                                return ReactHelper$ReactTemplate.optionalHandler(onClickContentOutside);
-                              })
-                          }, React.createElement("div", {
-                                className: "modal-dialog " + modalSizeToAttr(size),
-                                onClick: (function ($$event) {
-                                    $$event.stopPropagation();
-                                    return /* () */0;
-                                  })
-                              }, React.createElement("div", {
-                                    className: "modal-content"
-                                  }, ReactHelper$ReactTemplate.option(header), ReactHelper$ReactTemplate.option(body), ReactHelper$ReactTemplate.option(footer))));
+                return ReasonReact.element(undefined, undefined, ReactHelper$ReactTemplate.Fragment[/* make */0](/* array */[
+                                React.createElement("div", {
+                                      className: "modal modal-dialog fade modal-dialog-centered " + modalSizeToAttr(size),
+                                      style: hidden ? modalHiddenStyle : modalOpenStyle,
+                                      onClick: (function (prim) {
+                                          prim.stopPropagation();
+                                          return /* () */0;
+                                        })
+                                    }, React.createElement("div", {
+                                          className: "modal-content"
+                                        }, ReactHelper$ReactTemplate.option(header), ReactHelper$ReactTemplate.option(body), ReactHelper$ReactTemplate.option(footer))),
+                                React.createElement("div", {
+                                      className: hidden ? "h-bd" : "o-bd",
+                                      onClick: (function () {
+                                          return ReactHelper$ReactTemplate.optionalHandler(onClickContentOutside);
+                                        })
+                                    })
+                              ]));
               }),
             component[/* initialState */10],
             component[/* retainedProps */11],

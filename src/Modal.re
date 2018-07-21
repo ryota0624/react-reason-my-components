@@ -18,6 +18,8 @@ let modalOpenStyle =
     ~visibility="visible",
     ~transition="all 0.5s",
     ~opacity="1",
+    ~zIndex="1050",
+    ~top="0",
     (),
   );
 
@@ -30,7 +32,7 @@ let modalHiddenStyle =
     ~bottom="auto",
     ~opacity="1",
     ~pointerEvents="none",
-    ~zIndex="-1",
+    ~zIndex="1050",
     (),
   );
 
@@ -46,18 +48,20 @@ let make =
     ) => {
   ...component,
   render: _ =>
-    <div
-      style=(hidden ? modalHiddenStyle : modalOpenStyle)
-      className=("modal" ++ (hidden ? " hidden" : " open"))
-      onClick=(_ => onClickContentOutside |> ReactHelper.optionalHandler)>
+    <ReactHelper.Fragment>
       <div
-        className=("modal-dialog " ++ modalSizeToAttr(size))
-        onClick=(event => ReactEventRe.Synthetic.stopPropagation(event))>
+        className=("modal modal-dialog fade modal-dialog-centered " ++ modalSizeToAttr(size))
+        style=(hidden ? modalHiddenStyle : modalOpenStyle)
+        onClick=(ReactEventRe.Synthetic.stopPropagation)>
         <div className="modal-content">
           (header |> ReactHelper.option)
           (body |> ReactHelper.option)
           (footer |> ReactHelper.option)
         </div>
       </div>
-    </div>,
+    <div className=(hidden ? "h-bd" : "o-bd")
+      onClick=(_ => onClickContentOutside |> ReactHelper.optionalHandler)
+    /> 
+    </ReactHelper.Fragment>
+    ,
 };

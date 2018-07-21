@@ -5,15 +5,6 @@ type element;
 [@bs.send]
 external addEventListener : (Dom.element, string, unit => unit) => unit =
   "addEventListener";
-module Fragment = {
-  [@bs.module "react"] external fragment : ReasonReact.reactClass = "Fragment";
-  let make = children =>
-    ReasonReact.wrapJsForReason(
-      ~reactClass=fragment,
-      ~props=Js.Obj.empty(),
-      children,
-    );
-};
 
 type tableCell('column) = {
   column: 'column,

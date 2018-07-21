@@ -10,12 +10,6 @@ var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 var FlexibleTableHeader$ReactTemplate = require("./FlexibleTableHeader.bs.js");
 
-function make(children) {
-  return ReasonReact.wrapJsForReason(React.Fragment, { }, children);
-}
-
-var Fragment = /* module */Block.localModule(["make"], [make]);
-
 function FlexibleTable(T) {
   var defaultHeaders = function (headerColumns) {
     return List.map(T[/* defaultHeader */3], headerColumns);
@@ -152,6 +146,5 @@ exports.headerItemFromJs = headerItemFromJs;
 exports.valueToString = valueToString;
 exports.stringFromValue = stringFromValue;
 exports.getWidthSizeByTableWidthSize = getWidthSizeByTableWidthSize;
-exports.Fragment = Fragment;
 exports.FlexibleTable = FlexibleTable;
 /* react Not a pure module */

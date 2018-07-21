@@ -282,8 +282,6 @@ var stringFromValue = FlexibleTable$ReactTemplate.stringFromValue;
 
 var getWidthSizeByTableWidthSize = FlexibleTable$ReactTemplate.getWidthSizeByTableWidthSize;
 
-var Fragment = FlexibleTable$ReactTemplate.Fragment;
-
 var FlexibleTable = FlexibleTable$ReactTemplate.FlexibleTable;
 
 exports.getWidthSize = getWidthSize;
@@ -292,7 +290,6 @@ exports.headerItemFromJs = headerItemFromJs;
 exports.valueToString = valueToString;
 exports.stringFromValue = stringFromValue;
 exports.getWidthSizeByTableWidthSize = getWidthSizeByTableWidthSize;
-exports.Fragment = Fragment;
 exports.FlexibleTable = FlexibleTable;
 exports.renderRow = renderRow;
 exports.renderHeader = renderHeader;
