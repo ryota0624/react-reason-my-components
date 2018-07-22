@@ -32,3 +32,7 @@ let first = (validators: list(validator('e, 's))) => {
 
   Validator(validateLogic);
 };
+
+let run = (validator, getSubject, source) => switch (validator) {
+| Validator(execute) => source |> getSubject |> execute
+};

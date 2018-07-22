@@ -41,7 +41,12 @@ function first(validators) {
   return /* Validator */Block.simpleVariant("Validator", [validateLogic]);
 }
 
+function run(validator, getSubject, source) {
+  return Curry._1(validator[0], Curry._1(getSubject, source));
+}
+
 exports.fromErrors = fromErrors;
 exports.all = all;
 exports.first = first;
+exports.run = run;
 /* No side effect */
