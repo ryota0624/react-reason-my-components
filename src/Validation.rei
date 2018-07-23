@@ -6,4 +6,4 @@ let all: (list(validator('e, 's))) => validator('e, 's);
 
 let first: (list(validator('e, 's))) => validator('e, 's);
 
-let run: (validator('e, 'subject), 'source => 'subject, 'source) => list('e);
+let run: (validator('e, 'source), 'source) => list('e);

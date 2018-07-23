@@ -2,6 +2,7 @@
 'use strict';
 
 var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
 var Validation$ReactTemplate = require("../Validation.bs.js");
 
 var validateText = Validation$ReactTemplate.fromErrors((function (text) {
@@ -15,33 +16,77 @@ var validateText = Validation$ReactTemplate.fromErrors((function (text) {
         }
       }));
 
-var validateAge = Validation$ReactTemplate.fromErrors((function (age) {
-        if (age >= 0) {
-          return /* [] */0;
-        } else {
-          return /* :: */Block.simpleVariant("::", [
-                    /* InvalidAge */1,
-                    /* [] */0
-                  ]);
-        }
-      }));
+function validateAge(getAge) {
+  return Validation$ReactTemplate.fromErrors((function (record) {
+                if (Curry._1(getAge, record) >= 0) {
+                  return /* [] */0;
+                } else {
+                  return /* :: */Block.simpleVariant("::", [
+                            /* InvalidAge */1,
+                            /* [] */0
+                          ]);
+                }
+              }));
+}
 
-var validateName = Validation$ReactTemplate.fromErrors((function (name) {
-        if (name === "") {
-          return /* :: */Block.simpleVariant("::", [
-                    /* InvalidName */0,
-                    /* [] */0
-                  ]);
-        } else {
-          return /* [] */0;
-        }
-      }));
+function validateName(getName) {
+  return Validation$ReactTemplate.fromErrors((function (record) {
+                if (Curry._1(getName, record) === "") {
+                  return /* :: */Block.simpleVariant("::", [
+                            /* InvalidName */0,
+                            /* [] */0
+                          ]);
+                } else {
+                  return /* [] */0;
+                }
+              }));
+}
 
-Validation$ReactTemplate.run(validateText, (function (v) {
-        return v;
-      }), "success!");
+function ifEmptyString(getString, errors) {
+  return Validation$ReactTemplate.fromErrors((function (source) {
+                if (Curry._1(getString, source) === "") {
+                  return errors;
+                } else {
+                  return /* [] */0;
+                }
+              }));
+}
+
+Validation$ReactTemplate.run(validateText, "success!");
+
+Validation$ReactTemplate.run(Validation$ReactTemplate.all(/* :: */Block.simpleVariant("::", [
+            ifEmptyString((function (v) {
+                    return v;
+                  }), /* :: */Block.simpleVariant("::", [
+                    /* TextIsEmpty */1,
+                    /* [] */0
+                  ])),
+            /* :: */Block.simpleVariant("::", [
+                validateText,
+                /* [] */0
+              ])
+          ])), "");
+
+Validation$ReactTemplate.run(Validation$ReactTemplate.all(/* :: */Block.simpleVariant("::", [
+            validateAge((function (r) {
+                    return r[/* age */1];
+                  })),
+            /* :: */Block.simpleVariant("::", [
+                validateName((function (r) {
+                        return r[/* name */0];
+                      })),
+                /* [] */0
+              ])
+          ])), /* record */Block.record([
+        "name",
+        "age"
+      ], [
+        "dad",
+        30
+      ]));
 
 exports.validateText = validateText;
 exports.validateAge = validateAge;
 exports.validateName = validateName;
+exports.ifEmptyString = ifEmptyString;
 /* validateText Not a pure module */
