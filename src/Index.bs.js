@@ -8,6 +8,7 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Page$ReactTemplate = require("./Page.bs.js");
 var Helpers$ReactTemplate = require("./Helpers.bs.js");
 var Tooltip$ReactTemplate = require("./Tooltip.bs.js");
 var ModalSample$ReactTemplate = require("./ModalSample.bs.js");
@@ -74,6 +75,85 @@ var TextIncrementalSearchDef = /* module */Block.localModule([
 
 var TextIncrementalSearch = IncrementalSearch$ReactTemplate.IncrementalSearch([findEntities]);
 
+function SamplePage(Resolver) {
+  var initialize = function (resource) {
+    return /* record */Block.record([
+              "value",
+              "name"
+            ], [
+              resource[0],
+              resource[1]
+            ]);
+  };
+  var render = function (t) {
+    var name = t[/* name */1];
+    var valueStr = String(t[/* value */0]);
+    return name + valueStr;
+  };
+  var loadResource = function (arg) {
+    return Curry._1(Resolver[/* loadResource */0], 100).then((function (value) {
+                  return Promise.resolve(/* tuple */[
+                              value,
+                              String(value) + arg
+                            ]);
+                }));
+  };
+  return /* module */Block.localModule([
+            "componentName",
+            "initialize",
+            "render",
+            "loadResource"
+          ], [
+            "SampleIntPage",
+            initialize,
+            render,
+            loadResource
+          ]);
+}
+
+var loadResource = timePromise;
+
+var SamplePageResourceResolverImpl = /* module */Block.localModule(["loadResource"], [loadResource]);
+
+var ResourcePromiseWrapperDef = /* module */Block.localModule([], []);
+
+function initialize(resource) {
+  return /* record */Block.record([
+            "value",
+            "name"
+          ], [
+            resource[0],
+            resource[1]
+          ]);
+}
+
+function render(t) {
+  var name = t[/* name */1];
+  var valueStr = String(t[/* value */0]);
+  return name + valueStr;
+}
+
+function loadResource$1(arg) {
+  return timePromise(100).then((function (value) {
+                return Promise.resolve(/* tuple */[
+                            value,
+                            String(value) + arg
+                          ]);
+              }));
+}
+
+var SamplePageImpl = Page$ReactTemplate.Make(/* module */Block.localModule([
+          "componentName",
+          "initialize",
+          "render",
+          "loadResource"
+        ], [
+          "SampleIntPage",
+          initialize,
+          render,
+          loadResource$1
+        ]))(ResourcePromiseWrapperDef);
+
 ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonReact.element(undefined, undefined, Tooltip$ReactTemplate.make(/* Down */2, /* Large */2, "IAM TOOLTIP", React.createElement("button", {
                       className: "target"
                     }, "HELLO"), /* array */[])), ReasonReact.element(undefined, undefined, TodoFlexibleTable$ReactTemplate.TodoTableSample[/* make */3](/* array */[])), ReasonReact.element(undefined, undefined, Curry._5(IntPromiseWrapper[/* make */1], timePromise(1000), whenSuccess, whenError, whenPending, /* array */[])), ReasonReact.element(undefined, undefined, ModalSample$ReactTemplate.make(/* array */[])), ReasonReact.element(undefined, undefined, Curry._4(TextIncrementalSearch[/* make */2], undefined, undefined, (function (results) {
@@ -82,7 +162,7 @@ ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonRea
                                                       key: text
                                                     }, text);
                                         }), results)));
-                  }), /* array */[]))), "index");
+                  }), /* array */[])), ReasonReact.element(undefined, undefined, Curry._2(SamplePageImpl[/* make */5], "HOGE", /* array */[]))), "index");
 
 function add(x, y, z) {
   return (x + y | 0) + z | 0;
@@ -114,6 +194,10 @@ exports.r = r;
 exports.timePromise = timePromise;
 exports.TextIncrementalSearchDef = TextIncrementalSearchDef;
 exports.TextIncrementalSearch = TextIncrementalSearch;
+exports.SamplePage = SamplePage;
+exports.SamplePageResourceResolverImpl = SamplePageResourceResolverImpl;
+exports.ResourcePromiseWrapperDef = ResourcePromiseWrapperDef;
+exports.SamplePageImpl = SamplePageImpl;
 exports.add = add;
 exports.addFiveOops = addFiveOops;
 exports.add2 = add2;

@@ -3,6 +3,7 @@ module IntPromiseWrapperDef = {
   type v = int;
 };
 
+
 module IntPromiseWrapper = PromiseWrapper(IntPromiseWrapperDef);
 
 let whenSuccess = v => <div> (ReasonReact.string(string_of_int(v))) </div>;
@@ -36,6 +37,44 @@ module TextIncrementalSearchDef = {
 
 module TextIncrementalSearch = IncrementalSearch.IncrementalSearch(TextIncrementalSearchDef);
 
+
+module type SamplePageResourceResolver = {
+  let loadResource: (int) => Js.Promise.t(int)
+};
+
+
+module SamplePage = (Resolver: SamplePageResourceResolver) => {
+  type resource = (int, string);
+  type loadResourceArg = string;
+  type t = {value: int, name: string};
+  let componentName = "SampleIntPage";
+  let initialize = (resource) => {
+    value: resource |> fst,
+    name: resource |> snd
+  }
+
+  let render = (t) => {
+    let name = t.name;
+    let valueStr = t.value |> string_of_int;
+    ReasonReact.string(name ++ valueStr)
+  }
+
+  let loadResource = arg => {
+    open Js.Promise;
+    Resolver.loadResource(100)
+      |> then_((value) => (value, string_of_int(value) ++ arg) |> resolve )
+    }
+}
+
+module SamplePageResourceResolverImpl: SamplePageResourceResolver = {
+  let loadResource = (arg) => timePromise(arg);
+}
+module ResourcePromiseWrapperDef = {
+  type v = (int, string);
+}
+
+module SamplePageImpl = Page.Make(SamplePage(SamplePageResourceResolverImpl))(ResourcePromiseWrapperDef);
+
 ReactDOMRe.renderToElementWithId(
   <div>
     <Tooltip
@@ -66,6 +105,7 @@ ReactDOMRe.renderToElementWithId(
         </ul>
       )
     />
+    <SamplePageImpl loadResourceArg=("HOGE")/>
   </div>,
   "index",
 );
