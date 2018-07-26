@@ -73,5 +73,15 @@ function Make(D) {
     });
 }
 
+function Page(D) {
+  var initialize = function (loadResourceArg) {
+    return Curry._1(D[/* loadResource */3], loadResourceArg).then((function (resource) {
+                  return Promise.resolve(Curry._1(D[/* render */2], Curry._1(D[/* initialize */1], resource)));
+                }));
+  };
+  return /* module */Block.localModule(["initialize"], [initialize]);
+}
+
 exports.Make = Make;
+exports.Page = Page;
 /* react Not a pure module */

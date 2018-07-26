@@ -91,7 +91,7 @@ function SamplePage(Resolver) {
     return name + valueStr;
   };
   var loadResource = function (arg) {
-    return Curry._1(Resolver[/* loadResource */0], 100).then((function (value) {
+    return Curry._1(Resolver[/* loadResource */0], 1009).then((function (value) {
                   return Promise.resolve(/* tuple */[
                               value,
                               String(value) + arg
@@ -113,7 +113,7 @@ function SamplePage(Resolver) {
 
 var loadResource = timePromise;
 
-var SamplePageResourceResolverImpl = /* module */Block.localModule(["loadResource"], [loadResource]);
+var SamplePageResolverImpl = /* module */Block.localModule(["loadResource"], [loadResource]);
 
 var ResourcePromiseWrapperDef = /* module */Block.localModule([], []);
 
@@ -134,7 +134,7 @@ function render(t) {
 }
 
 function loadResource$1(arg) {
-  return timePromise(100).then((function (value) {
+  return timePromise(1009).then((function (value) {
                 return Promise.resolve(/* tuple */[
                             value,
                             String(value) + arg
@@ -195,7 +195,7 @@ exports.timePromise = timePromise;
 exports.TextIncrementalSearchDef = TextIncrementalSearchDef;
 exports.TextIncrementalSearch = TextIncrementalSearch;
 exports.SamplePage = SamplePage;
-exports.SamplePageResourceResolverImpl = SamplePageResourceResolverImpl;
+exports.SamplePageResolverImpl = SamplePageResolverImpl;
 exports.ResourcePromiseWrapperDef = ResourcePromiseWrapperDef;
 exports.SamplePageImpl = SamplePageImpl;
 exports.add = add;

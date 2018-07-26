@@ -37,13 +37,11 @@ module TextIncrementalSearchDef = {
 
 module TextIncrementalSearch = IncrementalSearch.IncrementalSearch(TextIncrementalSearchDef);
 
-
-module type SamplePageResourceResolver = {
+module type SamplePageDependentsResolver = {
   let loadResource: (int) => Js.Promise.t(int)
 };
 
-
-module SamplePage = (Resolver: SamplePageResourceResolver) => {
+module SamplePage = (Resolver: SamplePageDependentsResolver) => {
   type resource = (int, string);
   type loadResourceArg = string;
   type t = {value: int, name: string};
@@ -61,19 +59,19 @@ module SamplePage = (Resolver: SamplePageResourceResolver) => {
 
   let loadResource = arg => {
     open Js.Promise;
-    Resolver.loadResource(100)
+    Resolver.loadResource(1009)
       |> then_((value) => (value, string_of_int(value) ++ arg) |> resolve )
     }
 }
 
-module SamplePageResourceResolverImpl: SamplePageResourceResolver = {
+module SamplePageResolverImpl: SamplePageDependentsResolver = {
   let loadResource = (arg) => timePromise(arg);
 }
 module ResourcePromiseWrapperDef = {
   type v = (int, string);
 }
 
-module SamplePageImpl = Page.Make(SamplePage(SamplePageResourceResolverImpl))(ResourcePromiseWrapperDef);
+module SamplePageImpl = Page.Make(SamplePage(SamplePageResolverImpl))(ResourcePromiseWrapperDef);
 
 ReactDOMRe.renderToElementWithId(
   <div>
