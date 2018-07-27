@@ -10,7 +10,7 @@ function Application(R) {
     return page[0];
   };
   var component = ReasonReact.reducerComponent("application");
-  var make = function (_, initialPage, onError, onStartTransition, onFinishransition) {
+  var make = function (_, initialPage, onError, onStartTransition, onFinishTransition) {
     return /* record */Block.record([
               "debugName",
               "reactClassInternal",
@@ -37,13 +37,24 @@ function Application(R) {
                           var route = Curry._1(R[/* urlToRoute */0], url);
                           Curry._1(self[/* send */3], /* StartPageLoading */Block.variant("StartPageLoading", 0, [self[/* state */1][/* page */0][0]]));
                           Curry._1(R[/* transition */1], route).then((function (element) {
-                                    return Promise.resolve(/* LoadedPage */Block.variant("LoadedPage", 1, [element]));
-                                  })).catch(Curry.__1(onError));
+                                    return Promise.resolve(Curry._1(self[/* send */3], /* LoadedPage */Block.variant("LoadedPage", 1, [element])));
+                                  })).catch((function () {
+                                  Curry._1(onError, /* () */0);
+                                  return Promise.resolve(/* () */0);
+                                }));
                           return /* () */0;
                         }));
-                  return Curry._1(self[/* onUnmount */4], (function () {
-                                return ReasonReact.Router[/* unwatchUrl */2](id);
-                              }));
+                  Curry._1(self[/* onUnmount */4], (function () {
+                          return ReasonReact.Router[/* unwatchUrl */2](id);
+                        }));
+                  Curry._1(self[/* send */3], /* StartPageLoading */Block.variant("StartPageLoading", 0, [self[/* state */1][/* page */0][0]]));
+                  Curry._1(R[/* transition */1], Curry._1(R[/* urlToRoute */0], ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0))).then((function (element) {
+                            return Promise.resolve(Curry._1(self[/* send */3], /* LoadedPage */Block.variant("LoadedPage", 1, [element])));
+                          })).catch((function () {
+                          Curry._1(onError, /* () */0);
+                          return Promise.resolve(/* () */0);
+                        }));
+                  return /* () */0;
                 }),
               component[/* didUpdate */5],
               component[/* willUnmount */6],
@@ -61,7 +72,7 @@ function Application(R) {
                     return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
                               /* record */Block.record(["page"], [Block.variant("Loaded", 1, [action[0]])]),
                               (function () {
-                                  return Curry._1(onFinishransition, /* () */0);
+                                  return Curry._1(onFinishTransition, /* () */0);
                                 })
                             ]);
                   } else {

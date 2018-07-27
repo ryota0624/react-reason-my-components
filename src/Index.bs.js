@@ -10,6 +10,7 @@ var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Page$ReactTemplate = require("./Page.bs.js");
 var Helpers$ReactTemplate = require("./Helpers.bs.js");
+var Routing$ReactTemplate = require("./Routing.bs.js");
 var Tooltip$ReactTemplate = require("./Tooltip.bs.js");
 var ModalSample$ReactTemplate = require("./ModalSample.bs.js");
 var PromiseWrapper$ReactTemplate = require("./PromiseWrapper.bs.js");
@@ -154,16 +155,6 @@ var SamplePageImpl = Page$ReactTemplate.Make(/* module */Block.localModule([
           loadResource$1
         ]))(ResourcePromiseWrapperDef);
 
-ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonReact.element(undefined, undefined, Tooltip$ReactTemplate.make(/* Down */2, /* Large */2, "IAM TOOLTIP", React.createElement("button", {
-                      className: "target"
-                    }, "HELLO"), /* array */[])), ReasonReact.element(undefined, undefined, TodoFlexibleTable$ReactTemplate.TodoTableSample[/* make */3](/* array */[])), ReasonReact.element(undefined, undefined, Curry._5(IntPromiseWrapper[/* make */1], timePromise(1000), whenSuccess, whenError, whenPending, /* array */[])), ReasonReact.element(undefined, undefined, ModalSample$ReactTemplate.make(/* array */[])), ReasonReact.element(undefined, undefined, Curry._4(TextIncrementalSearch[/* make */2], undefined, undefined, (function (results) {
-                    return React.createElement("ul", undefined, $$Array.of_list(List.map((function (text) {
-                                          return React.createElement("li", {
-                                                      key: text
-                                                    }, text);
-                                        }), results)));
-                  }), /* array */[])), ReasonReact.element(undefined, undefined, Curry._2(SamplePageImpl[/* make */5], "HOGE", /* array */[]))), "index");
-
 function add(x, y, z) {
   return (x + y | 0) + z | 0;
 }
@@ -179,6 +170,88 @@ var addFiveOops2 = add2(5, 4, 4);
 function add3(x, y, z) {
   return (x + y | 0) + z | 0;
 }
+
+function urlToRoute(url) {
+  var route = url[/* path */0];
+  if (route) {
+    switch (route[0]) {
+      case "about" : 
+          if (route[1]) {
+            console.log(route);
+            return /* NotFound */2;
+          } else {
+            return /* About */1;
+          }
+      case "src" : 
+          var match = route[1];
+          if (match) {
+            if (match[0] === "index.html") {
+              if (match[1]) {
+                console.log(route);
+                return /* NotFound */2;
+              } else {
+                return /* Home */0;
+              }
+            } else {
+              console.log(route);
+              return /* NotFound */2;
+            }
+          } else {
+            console.log(route);
+            return /* NotFound */2;
+          }
+      default:
+        console.log(route);
+        return /* NotFound */2;
+    }
+  } else {
+    console.log(route);
+    return /* NotFound */2;
+  }
+}
+
+function transition(route) {
+  switch (route) {
+    case 0 : 
+        return timePromise(3000).then((function (v) {
+                      return Promise.resolve(React.createElement("div", undefined, String(v)));
+                    }));
+    case 1 : 
+        return Promise.resolve(React.createElement("div", undefined, "About"));
+    case 2 : 
+        return Promise.resolve(React.createElement("div", undefined, "NF"));
+    
+  }
+}
+
+var SampleRouting = /* module */Block.localModule([
+    "urlToRoute",
+    "transition"
+  ], [
+    urlToRoute,
+    transition
+  ]);
+
+var SampleApp = Routing$ReactTemplate.Application(SampleRouting);
+
+ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonReact.element(undefined, undefined, Tooltip$ReactTemplate.make(/* Down */2, /* Large */2, "IAM TOOLTIP", React.createElement("button", {
+                      className: "target"
+                    }, "HELLO"), /* array */[])), ReasonReact.element(undefined, undefined, TodoFlexibleTable$ReactTemplate.TodoTableSample[/* make */3](/* array */[])), ReasonReact.element(undefined, undefined, Curry._5(IntPromiseWrapper[/* make */1], timePromise(1000), whenSuccess, whenError, whenPending, /* array */[])), ReasonReact.element(undefined, undefined, ModalSample$ReactTemplate.make(/* array */[])), ReasonReact.element(undefined, undefined, Curry._4(TextIncrementalSearch[/* make */2], undefined, undefined, (function (results) {
+                    return React.createElement("ul", undefined, $$Array.of_list(List.map((function (text) {
+                                          return React.createElement("li", {
+                                                      key: text
+                                                    }, text);
+                                        }), results)));
+                  }), /* array */[])), ReasonReact.element(undefined, undefined, Curry._2(SamplePageImpl[/* make */5], "HOGE", /* array */[])), ReasonReact.element(undefined, undefined, Curry._5(SampleApp[/* make */2], /* array */[], React.createElement("div", undefined, "INITIAL"), (function () {
+                    console.error("ERROR!");
+                    return /* () */0;
+                  }), (function () {
+                    console.log("start_transition");
+                    return /* () */0;
+                  }), (function () {
+                    console.log("finish_transition");
+                    return /* () */0;
+                  })))), "index");
 
 var PromiseWrapper = PromiseWrapper$ReactTemplate.PromiseWrapper;
 
@@ -204,4 +277,6 @@ exports.add2 = add2;
 exports.addFiveOops2 = addFiveOops2;
 exports.add3 = add3;
 exports.addFiveOops3 = addFiveOops3;
+exports.SampleRouting = SampleRouting;
+exports.SampleApp = SampleApp;
 /* IntPromiseWrapper Not a pure module */
