@@ -4,8 +4,6 @@ type validator('e, 's) =
 let fromErrors = (getErrors: 'subject => list('e)) : validator('e, 'subject) =>
   Validator(getErrors);
 
-
-
 let all = (validators: list(validator('e, 's))) : validator('e, 's) => {
   let allGetErrors =
     validators
@@ -35,6 +33,7 @@ let first = (validators: list(validator('e, 's))) => {
   Validator(validateLogic);
 };
 
-let run = (validator, source) => switch (validator) {
-| Validator(execute) => source |> execute
-};
+let run = (validator, source) =>
+  switch (validator) {
+  | Validator(execute) => source |> execute
+  };

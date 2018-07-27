@@ -7,8 +7,6 @@ module Option = {
 };
 
 module String = {
-  let contain = (target: string, search: string) => {
-    open Js.Re;
-    test(target, fromString(search))
-  }
-}
+  let contain = (target: string, search: string) =>
+    Js.Re.(test(target, fromString(search)));
+};

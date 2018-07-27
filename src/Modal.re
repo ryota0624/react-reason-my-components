@@ -49,13 +49,10 @@ let modalBgStyle =
     ~position="fixed",
     ~width="100%",
     ~height="100%",
-    ()
-  );  
+    (),
+  );
 
-let modalBgHiddenStyle = 
-ReactDOMRe.Style.make(
-  ()
-);      
+let modalBgHiddenStyle = ReactDOMRe.Style.make();
 
 let make =
     (
@@ -69,21 +66,24 @@ let make =
     ) => {
   ...component,
   render: _ => {
-    let modalClassName = "modal modal-dialog fade modal-dialog-centered " ++ modalSizeToAttr(size);
+    let modalClassName =
+      "modal modal-dialog fade modal-dialog-centered "
+      ++ modalSizeToAttr(size);
     <ReactHelper.Fragment>
       <div
         className=modalClassName
         style=(hidden ? modalHiddenStyle : modalOpenStyle)
-        onClick=(ReactEventRe.Synthetic.stopPropagation)>
+        onClick=ReactEventRe.Synthetic.stopPropagation>
         <div className="modal-content">
           (header |> ReactHelper.option)
           (body |> ReactHelper.option)
           (footer |> ReactHelper.option)
         </div>
       </div>
-    <span style=(hidden ? modalBgHiddenStyle : modalBgStyle)
-      onClick=(_ => onClickContentOutside |> ReactHelper.optionalHandler)
-    /> 
-    </ReactHelper.Fragment>
+      <span
+        style=(hidden ? modalBgHiddenStyle : modalBgStyle)
+        onClick=(_ => onClickContentOutside |> ReactHelper.optionalHandler)
+      />
+    </ReactHelper.Fragment>;
   },
 };

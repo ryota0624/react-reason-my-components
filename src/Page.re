@@ -8,7 +8,11 @@ module type Def = {
   let loadResource: loadResourceArg => Js.Promise.t(resource);
 };
 
-module Make = (D: Def, Pdef: PromiseWrapper.PromiseWrapperDef with type v = D.resource) => {
+module Make =
+       (
+         D: Def,
+         Pdef: PromiseWrapper.PromiseWrapperDef with type v = D.resource,
+       ) => {
   module ResourcePromiseWrapper = PromiseWrapper.PromiseWrapper(Pdef);
 
   type resource = Js.Promise.t(D.resource);
@@ -33,6 +37,7 @@ module Make = (D: Def, Pdef: PromiseWrapper.PromiseWrapperDef with type v = D.re
 module Page = (D: Def) => {
   let initialize = (loadResourceArg: D.loadResourceArg) =>
     Js.Promise.(
-      D.loadResource(loadResourceArg) |> then_(resource => resource |> D.initialize |> D.render |> resolve)
+      D.loadResource(loadResourceArg)
+      |> then_(resource => resource |> D.initialize |> D.render |> resolve)
     );
 };
