@@ -18,10 +18,23 @@ module Application = (R: Routing) => {
 
   type action =
     | StartPageLoading(ReasonReact.reactElement)
-    | LoadedPage(ReasonReact.reactElement);
+    | LoadedPage(ReasonReact.reactElement)
+    | DetectedPageLoadError(Js.Promise.error);
 
   let component = ReasonReact.reducerComponent("application");
 
+  let transition = (send, page, url) => {
+    open Js.Promise;
+    let route = R.urlToRoute(url);
+    send(StartPageLoading(getPageElement(page)));
+    R.transition(route)
+    |> then_(element => LoadedPage(element) |> send |> resolve)
+    |> catch(error => {
+         send(DetectedPageLoadError(error));
+         resolve();
+       })
+    |> ignore;
+  };
   let make =
       (
         _children,
@@ -33,39 +46,15 @@ module Application = (R: Routing) => {
     ...component,
     initialState: () => {page: Loaded(initialPage)},
     didMount: self => {
-      open Js.Promise;
 
       let id =
-        ReasonReact.Router.watchUrl(url => {
-          let route = R.urlToRoute(url);
-          self.send(StartPageLoading(getPageElement(self.state.page)));
-          R.transition(route)
-          |> then_(element => LoadedPage(element) |> self.send |> resolve)
-          |> catch(_ => {
-               let _: unit = onError();
-               resolve();
-             })
-          |> ignore;
-        });
+        ReasonReact.Router.watchUrl(transition(self.send, self.state.page));
 
       self.onUnmount(() => ReasonReact.Router.unwatchUrl(id));
 
-      /**
-       * TODO 関数化
-       */
-      self.send(StartPageLoading(getPageElement(self.state.page)));
-
-      R.transition(
-        R.urlToRoute(ReasonReact.Router.dangerouslyGetInitialUrl()),
-      )
-      |> then_(element => LoadedPage(element) |> self.send |> resolve)
-      |> catch(_ => {
-           let _: unit = onError();
-           resolve();
-         })
-      |> ignore;
+      transition(self.send, self.state.page, ReasonReact.Router.dangerouslyGetInitialUrl())
     },
-    reducer: (action, _) =>
+    reducer: (action, state) =>
       switch (action) {
       | StartPageLoading(element) =>
         ReasonReact.UpdateWithSideEffects(
@@ -77,6 +66,10 @@ module Application = (R: Routing) => {
           {page: Loaded(element)},
           (_ => onFinishTransition()),
         )
+      | DetectedPageLoadError(error) =>
+        ReasonReact.UpdateWithSideEffects(
+            {page: Loaded(getPageElement(state.page))},
+            (_ => onError(error)))
       },
     render: self => getPageElement(self.state.page),
   };

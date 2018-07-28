@@ -10,6 +10,17 @@ function Application(R) {
     return page[0];
   };
   var component = ReasonReact.reducerComponent("application");
+  var transition = function (send, page, url) {
+    var route = Curry._1(R[/* urlToRoute */0], url);
+    Curry._1(send, /* StartPageLoading */Block.variant("StartPageLoading", 0, [page[0]]));
+    Curry._1(R[/* transition */1], route).then((function (element) {
+              return Promise.resolve(Curry._1(send, /* LoadedPage */Block.variant("LoadedPage", 1, [element])));
+            })).catch((function (error) {
+            Curry._1(send, /* DetectedPageLoadError */Block.variant("DetectedPageLoadError", 2, [error]));
+            return Promise.resolve(/* () */0);
+          }));
+    return /* () */0;
+  };
   var make = function (_, initialPage, onError, onStartTransition, onFinishTransition) {
     return /* record */Block.record([
               "debugName",
@@ -33,28 +44,15 @@ function Application(R) {
               component[/* handedOffState */2],
               component[/* willReceiveProps */3],
               (function (self) {
-                  var id = ReasonReact.Router[/* watchUrl */1]((function (url) {
-                          var route = Curry._1(R[/* urlToRoute */0], url);
-                          Curry._1(self[/* send */3], /* StartPageLoading */Block.variant("StartPageLoading", 0, [self[/* state */1][/* page */0][0]]));
-                          Curry._1(R[/* transition */1], route).then((function (element) {
-                                    return Promise.resolve(Curry._1(self[/* send */3], /* LoadedPage */Block.variant("LoadedPage", 1, [element])));
-                                  })).catch((function () {
-                                  Curry._1(onError, /* () */0);
-                                  return Promise.resolve(/* () */0);
-                                }));
-                          return /* () */0;
+                  var partial_arg = self[/* state */1][/* page */0];
+                  var partial_arg$1 = self[/* send */3];
+                  var id = ReasonReact.Router[/* watchUrl */1]((function (param) {
+                          return transition(partial_arg$1, partial_arg, param);
                         }));
                   Curry._1(self[/* onUnmount */4], (function () {
                           return ReasonReact.Router[/* unwatchUrl */2](id);
                         }));
-                  Curry._1(self[/* send */3], /* StartPageLoading */Block.variant("StartPageLoading", 0, [self[/* state */1][/* page */0][0]]));
-                  Curry._1(R[/* transition */1], Curry._1(R[/* urlToRoute */0], ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0))).then((function (element) {
-                            return Promise.resolve(Curry._1(self[/* send */3], /* LoadedPage */Block.variant("LoadedPage", 1, [element])));
-                          })).catch((function () {
-                          Curry._1(onError, /* () */0);
-                          return Promise.resolve(/* () */0);
-                        }));
-                  return /* () */0;
+                  return transition(self[/* send */3], self[/* state */1][/* page */0], ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0));
                 }),
               component[/* didUpdate */5],
               component[/* willUnmount */6],
@@ -67,21 +65,31 @@ function Application(R) {
                   return /* record */Block.record(["page"], [Block.variant("Loaded", 1, [initialPage])]);
                 }),
               component[/* retainedProps */11],
-              (function (action, _) {
-                  if (action.tag) {
-                    return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
-                              /* record */Block.record(["page"], [Block.variant("Loaded", 1, [action[0]])]),
-                              (function () {
-                                  return Curry._1(onFinishTransition, /* () */0);
-                                })
-                            ]);
-                  } else {
-                    return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
-                              /* record */Block.record(["page"], [Block.variant("InTransition", 0, [action[0]])]),
-                              (function () {
-                                  return Curry._1(onStartTransition, /* () */0);
-                                })
-                            ]);
+              (function (action, state) {
+                  switch (action.tag | 0) {
+                    case 0 : 
+                        return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
+                                  /* record */Block.record(["page"], [Block.variant("InTransition", 0, [action[0]])]),
+                                  (function () {
+                                      return Curry._1(onStartTransition, /* () */0);
+                                    })
+                                ]);
+                    case 1 : 
+                        return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
+                                  /* record */Block.record(["page"], [Block.variant("Loaded", 1, [action[0]])]),
+                                  (function () {
+                                      return Curry._1(onFinishTransition, /* () */0);
+                                    })
+                                ]);
+                    case 2 : 
+                        var error = action[0];
+                        return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
+                                  /* record */Block.record(["page"], [Block.variant("Loaded", 1, [state[/* page */0][0]])]),
+                                  (function () {
+                                      return Curry._1(onError, error);
+                                    })
+                                ]);
+                    
                   }
                 }),
               component[/* subscriptions */13],
@@ -91,10 +99,12 @@ function Application(R) {
   return /* module */Block.localModule([
             "getPageElement",
             "component",
+            "transition",
             "make"
           ], [
             getPageElement,
             component,
+            transition,
             make
           ]);
 }

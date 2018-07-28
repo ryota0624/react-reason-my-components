@@ -242,7 +242,7 @@ ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonRea
                                                       key: text
                                                     }, text);
                                         }), results)));
-                  }), /* array */[])), ReasonReact.element(undefined, undefined, Curry._2(SamplePageImpl[/* make */5], "HOGE", /* array */[])), ReasonReact.element(undefined, undefined, Curry._5(SampleApp[/* make */2], /* array */[], React.createElement("div", undefined, "INITIAL"), (function () {
+                  }), /* array */[])), ReasonReact.element(undefined, undefined, Curry._2(SamplePageImpl[/* make */5], "HOGE", /* array */[])), ReasonReact.element(undefined, undefined, Curry._5(SampleApp[/* make */3], /* array */[], React.createElement("div", undefined, "INITIAL"), (function () {
                     console.error("ERROR!");
                     return /* () */0;
                   }), (function () {
