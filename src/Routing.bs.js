@@ -10,18 +10,19 @@ function Application(R) {
     return page[0];
   };
   var component = ReasonReact.reducerComponent("application");
-  var transition = function (send, page, url) {
-    var route = Curry._1(R[/* urlToRoute */0], url);
-    Curry._1(send, /* StartPageLoading */Block.variant("StartPageLoading", 0, [page[0]]));
-    Curry._1(R[/* transition */1], route).then((function (element) {
-              return Promise.resolve(Curry._1(send, /* LoadedPage */Block.variant("LoadedPage", 1, [element])));
-            })).catch((function (error) {
-            Curry._1(send, /* DetectedPageLoadError */Block.variant("DetectedPageLoadError", 2, [error]));
-            return Promise.resolve(/* () */0);
-          }));
-    return /* () */0;
-  };
   var make = function (_, initialPage, onError, onStartTransition, onFinishTransition) {
+    var transition2 = function (url, param) {
+      var send = param[/* send */3];
+      var route = Curry._1(R[/* urlToRoute */0], url);
+      Curry._1(send, /* StartPageLoading */Block.variant("StartPageLoading", 0, [param[/* state */1][/* page */0][0]]));
+      Curry._1(R[/* transition */1], route).then((function (element) {
+                return Promise.resolve(Curry._1(send, /* LoadedPage */Block.variant("LoadedPage", 1, [element])));
+              })).catch((function (error) {
+              Curry._1(send, /* DetectedPageLoadError */Block.variant("DetectedPageLoadError", 2, [error]));
+              return Promise.resolve(/* () */0);
+            }));
+      return /* () */0;
+    };
     return /* record */Block.record([
               "debugName",
               "reactClassInternal",
@@ -44,15 +45,11 @@ function Application(R) {
               component[/* handedOffState */2],
               component[/* willReceiveProps */3],
               (function (self) {
-                  var partial_arg = self[/* state */1][/* page */0];
-                  var partial_arg$1 = self[/* send */3];
-                  var id = ReasonReact.Router[/* watchUrl */1]((function (param) {
-                          return transition(partial_arg$1, partial_arg, param);
-                        }));
+                  var id = ReasonReact.Router[/* watchUrl */1](Curry._1(self[/* handle */0], transition2));
                   Curry._1(self[/* onUnmount */4], (function () {
                           return ReasonReact.Router[/* unwatchUrl */2](id);
                         }));
-                  return transition(self[/* send */3], self[/* state */1][/* page */0], ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0));
+                  return Curry._2(self[/* handle */0], transition2, ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0));
                 }),
               component[/* didUpdate */5],
               component[/* willUnmount */6],
@@ -99,12 +96,10 @@ function Application(R) {
   return /* module */Block.localModule([
             "getPageElement",
             "component",
-            "transition",
             "make"
           ], [
             getPageElement,
             component,
-            transition,
             make
           ]);
 }
