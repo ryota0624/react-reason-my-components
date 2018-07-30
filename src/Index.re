@@ -99,18 +99,23 @@ module SampleRouting: Routing.Routing = {
     switch (url.path) {
     | ["src", "index.html"] => Home
     | ["about"] => About
-    | route => Js.Console.log(route); NotFound
+    | route =>
+      Js.Console.log(route);
+      NotFound;
     };
   let transition = route =>
-    (
-      switch (route) {
-      | Home => 
-        timePromise(3000) 
-          |> Js.Promise.then_((v) => <div> (ReasonReact.string(string_of_int(v))) </div> |> Js.Promise.resolve)
-      | About => <div> (ReasonReact.string("About")) </div> |> Js.Promise.resolve
-      | NotFound => <div> (ReasonReact.string("NF")) </div> |> Js.Promise.resolve
-      }
-    )
+    switch (route) {
+    | Home =>
+      timePromise(3000)
+      |> Js.Promise.then_(v =>
+           <div> (ReasonReact.string(string_of_int(v))) </div>
+           |> Js.Promise.resolve
+         )
+    | About =>
+      <div> (ReasonReact.string("About")) </div> |> Js.Promise.resolve
+    | NotFound =>
+      <div> (ReasonReact.string("NF")) </div> |> Js.Promise.resolve
+    };
 };
 
 module SampleApp = Routing.Application(SampleRouting);
