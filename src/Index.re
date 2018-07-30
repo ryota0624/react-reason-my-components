@@ -120,6 +120,39 @@ module SampleRouting: Routing.Routing = {
 
 module SampleApp = Routing.Application(SampleRouting);
 
+type user = {
+  name: string,
+  id: string,
+};
+
+let userFactory = name => {name, id: name};
+
+module UserLeaf = {
+  type t = user;
+  let identity = user => user.id;
+  let showLeaf = user => <p key=user.id> (ReasonReact.string(user.name)) </p>;
+};
+
+module UserTree = TreeData.Tree(UserLeaf);
+
+let userTreeSample = {
+  let leaf1 = UserTree.leaf(userFactory("user1"));
+  let leaf2 = UserTree.leaf(userFactory("user2"));
+  let leaf3 = UserTree.leaf(userFactory("user3"));
+  let leaf4 = UserTree.leaf(userFactory("user4"));
+  let leaf5 = UserTree.leaf(userFactory("user5"));
+
+  let node1Tmp = UserTree.node([leaf1, leaf2]);
+  let node2 = UserTree.node([leaf4]);
+
+  let node1 = UserTree.node([node1Tmp, leaf5]);
+
+  let tree = UserTree.node([node1, node2, leaf3]);
+  tree;
+};
+
+Js.Console.log(userTreeSample);
+
 ReactDOMRe.renderToElementWithId(
   <div>
     <Tooltip
@@ -160,6 +193,7 @@ ReactDOMRe.renderToElementWithId(
       onStartTransition=(() => Js.Console.log("start_transition"))
       onFinishTransition=(() => Js.Console.log("finish_transition"))
     />
+    (UserTree.showTree(userTreeSample))
   </div>,
   "index",
 );

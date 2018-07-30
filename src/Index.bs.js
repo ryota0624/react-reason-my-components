@@ -12,6 +12,7 @@ var Page$ReactTemplate = require("./Page.bs.js");
 var Helpers$ReactTemplate = require("./Helpers.bs.js");
 var Routing$ReactTemplate = require("./Routing.bs.js");
 var Tooltip$ReactTemplate = require("./Tooltip.bs.js");
+var TreeData$ReactTemplate = require("./TreeData.bs.js");
 var ModalSample$ReactTemplate = require("./ModalSample.bs.js");
 var PromiseWrapper$ReactTemplate = require("./PromiseWrapper.bs.js");
 var IncrementalSearch$ReactTemplate = require("./IncrementalSearch.bs.js");
@@ -234,6 +235,110 @@ var SampleRouting = /* module */Block.localModule([
 
 var SampleApp = Routing$ReactTemplate.Application(SampleRouting);
 
+function userFactory(name) {
+  return /* record */Block.record([
+            "name",
+            "id"
+          ], [
+            name,
+            name
+          ]);
+}
+
+function identity(user) {
+  return user[/* id */1];
+}
+
+function showLeaf(user) {
+  return React.createElement("p", {
+              key: user[/* id */1]
+            }, user[/* name */0]);
+}
+
+var UserLeaf = /* module */Block.localModule([
+    "identity",
+    "showLeaf"
+  ], [
+    identity,
+    showLeaf
+  ]);
+
+var UserTree = TreeData$ReactTemplate.Tree(UserLeaf);
+
+var leaf1 = Curry._1(UserTree[/* leaf */0], /* record */Block.record([
+        "name",
+        "id"
+      ], [
+        "user1",
+        "user1"
+      ]));
+
+var leaf2 = Curry._1(UserTree[/* leaf */0], /* record */Block.record([
+        "name",
+        "id"
+      ], [
+        "user2",
+        "user2"
+      ]));
+
+var leaf3 = Curry._1(UserTree[/* leaf */0], /* record */Block.record([
+        "name",
+        "id"
+      ], [
+        "user3",
+        "user3"
+      ]));
+
+var leaf4 = Curry._1(UserTree[/* leaf */0], /* record */Block.record([
+        "name",
+        "id"
+      ], [
+        "user4",
+        "user4"
+      ]));
+
+var leaf5 = Curry._1(UserTree[/* leaf */0], /* record */Block.record([
+        "name",
+        "id"
+      ], [
+        "user5",
+        "user5"
+      ]));
+
+var node1Tmp = Curry._1(UserTree[/* node */1], /* :: */Block.simpleVariant("::", [
+        leaf1,
+        /* :: */Block.simpleVariant("::", [
+            leaf2,
+            /* [] */0
+          ])
+      ]));
+
+var node2 = Curry._1(UserTree[/* node */1], /* :: */Block.simpleVariant("::", [
+        leaf4,
+        /* [] */0
+      ]));
+
+var node1 = Curry._1(UserTree[/* node */1], /* :: */Block.simpleVariant("::", [
+        node1Tmp,
+        /* :: */Block.simpleVariant("::", [
+            leaf5,
+            /* [] */0
+          ])
+      ]));
+
+var tree = Curry._1(UserTree[/* node */1], /* :: */Block.simpleVariant("::", [
+        node1,
+        /* :: */Block.simpleVariant("::", [
+            node2,
+            /* :: */Block.simpleVariant("::", [
+                leaf3,
+                /* [] */0
+              ])
+          ])
+      ]));
+
+console.log(tree);
+
 ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonReact.element(undefined, undefined, Tooltip$ReactTemplate.make(/* Down */2, /* Large */2, "IAM TOOLTIP", React.createElement("button", {
                       className: "target"
                     }, "HELLO"), /* array */[])), ReasonReact.element(undefined, undefined, TodoFlexibleTable$ReactTemplate.TodoTableSample[/* make */3](/* array */[])), ReasonReact.element(undefined, undefined, Curry._5(IntPromiseWrapper[/* make */1], timePromise(1000), whenSuccess, whenError, whenPending, /* array */[])), ReasonReact.element(undefined, undefined, ModalSample$ReactTemplate.make(/* array */[])), ReasonReact.element(undefined, undefined, Curry._4(TextIncrementalSearch[/* make */2], undefined, undefined, (function (results) {
@@ -251,11 +356,13 @@ ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonRea
                   }), (function () {
                     console.log("finish_transition");
                     return /* () */0;
-                  })))), "index");
+                  }))), Curry._1(UserTree[/* showTree */4], tree)), "index");
 
 var PromiseWrapper = PromiseWrapper$ReactTemplate.PromiseWrapper;
 
 var addFiveOops3 = 13;
+
+var userTreeSample = tree;
 
 exports.PromiseWrapper = PromiseWrapper;
 exports.IntPromiseWrapperDef = IntPromiseWrapperDef;
@@ -279,4 +386,8 @@ exports.add3 = add3;
 exports.addFiveOops3 = addFiveOops3;
 exports.SampleRouting = SampleRouting;
 exports.SampleApp = SampleApp;
+exports.userFactory = userFactory;
+exports.UserLeaf = UserLeaf;
+exports.UserTree = UserTree;
+exports.userTreeSample = userTreeSample;
 /* IntPromiseWrapper Not a pure module */
