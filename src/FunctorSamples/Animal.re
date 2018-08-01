@@ -11,3 +11,12 @@ type animalA = {
   weight: float,
   character: animalCharacter,
 };
+
+module ANIMAL = {
+  type a = pri {
+    name: string
+    };
+
+  type b = pri B | BB;
+
+}
