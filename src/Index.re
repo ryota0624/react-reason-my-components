@@ -16,11 +16,13 @@ Js.Console.log(executeNullableResult);
 let _ = {
   open Js;
   open Js.Promise;
-  let executeNullableResultOpt = Js.Undefined.toOption(executeNullableResult);
+  let executeNullableResultOpt: option(int) = Js.Undefined.toOption(executeNullableResult);
   let appendOne = (+)(1);
   let r = executeNullableResultOpt
   |> Option.map((. a) => appendOne(a))
-  |> Option.map(~> appendOne);
+  |> Option.map(~> appendOne)
+  |> Belt.Option.map(_, appendOne)
+  |. Belt.Option.map(appendOne);
   Console.log(r);
 };
 
