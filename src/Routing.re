@@ -14,11 +14,11 @@ module Application = (R: Routing) => {
     pageElement;
   };
 
-  type state = {page};
+  type state = {page, lastTransitionTime: float};
 
   type action =
-    | StartPageLoading(ReasonReact.reactElement)
-    | LoadedPage(ReasonReact.reactElement)
+    | StartPageLoading(ReasonReact.reactElement, float)
+    | LoadedPage(ReasonReact.reactElement, float)
     | DetectedPageLoadError(Js.Promise.error);
 
   let component = ReasonReact.reducerComponent("application");
@@ -33,10 +33,11 @@ module Application = (R: Routing) => {
       ) => {
     let transition2 = (url, {ReasonReact.send, ReasonReact.state}) => {
       open Js.Promise;
+      let startTransitionTime = Js.Date.now();
       let route = R.urlToRoute(url);
-      send(StartPageLoading(getPageElement(state.page)));
+      send(StartPageLoading(getPageElement(state.page), startTransitionTime));
       R.transition(route)
-      |> then_(element => LoadedPage(element) |> send |> resolve)
+      |> then_(element => LoadedPage(element, startTransitionTime) |> send |> resolve)
       |> catch(error => {
            send(DetectedPageLoadError(error));
            resolve();
@@ -45,7 +46,7 @@ module Application = (R: Routing) => {
     };
     {
       ...component,
-      initialState: () => {page: Loaded(initialPage)},
+      initialState: () => {page: Loaded(initialPage), lastTransitionTime: Js.Date.now()},
       didMount: self => {
         let id = ReasonReact.Router.watchUrl(self.handle(transition2));
         self.onUnmount(() => ReasonReact.Router.unwatchUrl(id));
@@ -56,19 +57,21 @@ module Application = (R: Routing) => {
       },
       reducer: (action, state) =>
         switch (action) {
-        | StartPageLoading(element) =>
+        | StartPageLoading(element, transitionStartTime) =>
           ReasonReact.UpdateWithSideEffects(
-            {page: InTransition(element)},
+            {page: InTransition(element), lastTransitionTime: transitionStartTime},
             (_ => onStartTransition()),
           )
-        | LoadedPage(element) =>
-          ReasonReact.UpdateWithSideEffects(
-            {page: Loaded(element)},
-            (_ => onFinishTransition()),
-          )
+        | LoadedPage(element, transitionStartTime) =>
+          if (transitionStartTime == state.lastTransitionTime) {
+            ReasonReact.UpdateWithSideEffects(
+              {...state, page: Loaded(element)},
+              (_ => onFinishTransition()),
+            )
+          } else ReasonReact.NoUpdate
         | DetectedPageLoadError(error) =>
           ReasonReact.UpdateWithSideEffects(
-            {page: Loaded(getPageElement(state.page))},
+            {...state, page: Loaded(getPageElement(state.page))},
             (_ => onError(error)),
           )
         },
