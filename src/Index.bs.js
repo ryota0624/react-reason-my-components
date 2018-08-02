@@ -17,6 +17,23 @@ var ModalSample$ReactTemplate = require("./ModalSample.bs.js");
 var PromiseWrapper$ReactTemplate = require("./PromiseWrapper.bs.js");
 var IncrementalSearch$ReactTemplate = require("./IncrementalSearch.bs.js");
 var TodoFlexibleTable$ReactTemplate = require("./Samples/TodoFlexibleTable.bs.js");
+var ExecuteSomeService = require("./externalJsModules/ExecuteSomeService");
+
+function andThen(a, b, v) {
+  return Curry._1(b, Curry._1(a, v));
+}
+
+var executeResult = ExecuteSomeService.execute(100);
+
+console.log(executeResult);
+
+var executePromiseResult = ExecuteSomeService.executePromise(100);
+
+executePromiseResult.then((function (param) {
+          return Promise.resolve(100 + param | 0);
+        })).then((function (param) {
+        return Promise.resolve((console.log(param), /* () */0));
+      }));
 
 var IntPromiseWrapperDef = /* module */Block.localModule([], []);
 
@@ -360,11 +377,17 @@ ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonRea
 
 var PromiseWrapper = PromiseWrapper$ReactTemplate.PromiseWrapper;
 
+var $great$great = andThen;
+
 var addFiveOops3 = 13;
 
 var userTreeSample = tree;
 
 exports.PromiseWrapper = PromiseWrapper;
+exports.andThen = andThen;
+exports.$great$great = $great$great;
+exports.executeResult = executeResult;
+exports.executePromiseResult = executePromiseResult;
 exports.IntPromiseWrapperDef = IntPromiseWrapperDef;
 exports.IntPromiseWrapper = IntPromiseWrapper;
 exports.whenSuccess = whenSuccess;
@@ -390,4 +413,4 @@ exports.userFactory = userFactory;
 exports.UserLeaf = UserLeaf;
 exports.UserTree = UserTree;
 exports.userTreeSample = userTreeSample;
-/* IntPromiseWrapper Not a pure module */
+/* executeResult Not a pure module */

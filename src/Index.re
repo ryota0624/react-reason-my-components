@@ -1,4 +1,23 @@
 include PromiseWrapper;
+
+let andThen = (a, b, v) => b(a(v)); 
+let (>>) = andThen;
+
+[@bs.module "./externalJsModules/ExecuteSomeService"] external execute : int => int = "execute";
+let executeResult = execute(100);
+
+Js.Console.log(executeResult);
+
+[@bs.module "./externalJsModules/ExecuteSomeService"] external executePromise : int => Js.Promise.t(int) = "executePromise";
+let executePromiseResult = executePromise(100);
+
+Js.Promise.(
+  executePromiseResult
+    |> then_((+)(100) >> resolve)
+    |> then_(andThen(Js.Console.log, resolve))
+);
+
+
 module IntPromiseWrapperDef = {
   type v = int;
 };
