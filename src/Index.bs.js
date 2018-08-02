@@ -6,8 +6,10 @@ var $$Array = require("bs-platform/lib/js/array.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
+var Js_option = require("bs-platform/lib/js/js_option.js");
 var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 var Page$ReactTemplate = require("./Page.bs.js");
 var Helpers$ReactTemplate = require("./Helpers.bs.js");
 var Routing$ReactTemplate = require("./Routing.bs.js");
@@ -23,9 +25,27 @@ function andThen(a, b, v) {
   return Curry._1(b, Curry._1(a, v));
 }
 
+function toFragment(fn) {
+  return Curry.__1(fn);
+}
+
 var executeResult = ExecuteSomeService.execute(100);
 
 console.log(executeResult);
+
+var executeNullableResult = ExecuteSomeService.executeNullable(100);
+
+console.log(executeNullableResult);
+
+var executeNullableResultOpt = executeNullableResult === undefined ? undefined : Js_primitive.some(executeNullableResult);
+
+var r = Js_option.map((function (a) {
+        return 1 + a | 0;
+      }), Js_option.map((function (a) {
+            return 1 + a | 0;
+          }), executeNullableResultOpt));
+
+console.log(r);
 
 var executePromiseResult = ExecuteSomeService.executePromise(100);
 
@@ -49,7 +69,7 @@ function whenError() {
 
 var whenPending = React.createElement("div", undefined, React.createElement("p", undefined, "NowLoading..."));
 
-function r() {
+function r$1() {
   return /* () */0;
 }
 
@@ -379,6 +399,8 @@ var PromiseWrapper = PromiseWrapper$ReactTemplate.PromiseWrapper;
 
 var $great$great = andThen;
 
+var $tilde$great = toFragment;
+
 var addFiveOops3 = 13;
 
 var userTreeSample = tree;
@@ -386,14 +408,17 @@ var userTreeSample = tree;
 exports.PromiseWrapper = PromiseWrapper;
 exports.andThen = andThen;
 exports.$great$great = $great$great;
+exports.toFragment = toFragment;
+exports.$tilde$great = $tilde$great;
 exports.executeResult = executeResult;
+exports.executeNullableResult = executeNullableResult;
 exports.executePromiseResult = executePromiseResult;
 exports.IntPromiseWrapperDef = IntPromiseWrapperDef;
 exports.IntPromiseWrapper = IntPromiseWrapper;
 exports.whenSuccess = whenSuccess;
 exports.whenError = whenError;
 exports.whenPending = whenPending;
-exports.r = r;
+exports.r = r$1;
 exports.timePromise = timePromise;
 exports.TextIncrementalSearchDef = TextIncrementalSearchDef;
 exports.TextIncrementalSearch = TextIncrementalSearch;

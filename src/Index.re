@@ -2,11 +2,29 @@ include PromiseWrapper;
 
 let andThen = (a, b, v) => b(a(v)); 
 let (>>) = andThen;
+let toFragment = (fn) => (. a) => fn(a);
+let (~>) = toFragment;
 
 [@bs.module "./externalJsModules/ExecuteSomeService"] external execute : int => int = "execute";
 let executeResult = execute(100);
 
 Js.Console.log(executeResult);
+
+[@bs.module "./externalJsModules/ExecuteSomeService"] external executeNullable : int => Js.Undefined.t(int) = "executeNullable";
+let executeNullableResult = executeNullable(100);
+Js.Console.log(executeNullableResult);
+let _ = {
+  open Js;
+  open Js.Promise;
+  let executeNullableResultOpt = Js.Undefined.toOption(executeNullableResult);
+  let appendOne = (+)(1);
+  let r = executeNullableResultOpt
+  |> Option.map((. a) => appendOne(a))
+  |> Option.map(~> appendOne);
+  Console.log(r);
+};
+
+
 
 [@bs.module "./externalJsModules/ExecuteSomeService"] external executePromise : int => Js.Promise.t(int) = "executePromise";
 let executePromiseResult = executePromise(100);
