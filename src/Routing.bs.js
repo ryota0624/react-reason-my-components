@@ -13,10 +13,17 @@ function Application(R) {
   var make = function (_, initialPage, onError, onStartTransition, onFinishTransition) {
     var transition2 = function (url, param) {
       var send = param[/* send */3];
+      var startTransitionTime = Date.now();
       var route = Curry._1(R[/* urlToRoute */0], url);
-      Curry._1(send, /* StartPageLoading */Block.variant("StartPageLoading", 0, [param[/* state */1][/* page */0][0]]));
+      Curry._1(send, /* StartPageLoading */Block.variant("StartPageLoading", 0, [
+              param[/* state */1][/* page */0][0],
+              startTransitionTime
+            ]));
       Curry._1(R[/* transition */1], route).then((function (element) {
-                return Promise.resolve(Curry._1(send, /* LoadedPage */Block.variant("LoadedPage", 1, [element])));
+                return Promise.resolve(Curry._1(send, /* LoadedPage */Block.variant("LoadedPage", 1, [
+                                  element,
+                                  startTransitionTime
+                                ])));
               })).catch((function (error) {
               Curry._1(send, /* DetectedPageLoadError */Block.variant("DetectedPageLoadError", 2, [error]));
               return Promise.resolve(/* () */0);
@@ -59,29 +66,57 @@ function Application(R) {
                   return self[/* state */1][/* page */0][0];
                 }),
               (function () {
-                  return /* record */Block.record(["page"], [Block.variant("Loaded", 1, [initialPage])]);
+                  return /* record */Block.record([
+                            "page",
+                            "lastTransitionTime"
+                          ], [
+                            Block.variant("Loaded", 1, [initialPage]),
+                            Date.now()
+                          ]);
                 }),
               component[/* retainedProps */11],
               (function (action, state) {
                   switch (action.tag | 0) {
                     case 0 : 
                         return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
-                                  /* record */Block.record(["page"], [Block.variant("InTransition", 0, [action[0]])]),
+                                  /* record */Block.record([
+                                      "page",
+                                      "lastTransitionTime"
+                                    ], [
+                                      Block.variant("InTransition", 0, [action[0]]),
+                                      action[1]
+                                    ]),
                                   (function () {
                                       return Curry._1(onStartTransition, /* () */0);
                                     })
                                 ]);
                     case 1 : 
-                        return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
-                                  /* record */Block.record(["page"], [Block.variant("Loaded", 1, [action[0]])]),
-                                  (function () {
-                                      return Curry._1(onFinishTransition, /* () */0);
-                                    })
-                                ]);
+                        if (action[1] === state[/* lastTransitionTime */1]) {
+                          return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
+                                    /* record */Block.record([
+                                        "page",
+                                        "lastTransitionTime"
+                                      ], [
+                                        Block.variant("Loaded", 1, [action[0]]),
+                                        state[/* lastTransitionTime */1]
+                                      ]),
+                                    (function () {
+                                        return Curry._1(onFinishTransition, /* () */0);
+                                      })
+                                  ]);
+                        } else {
+                          return /* NoUpdate */0;
+                        }
                     case 2 : 
                         var error = action[0];
                         return /* UpdateWithSideEffects */Block.variant("UpdateWithSideEffects", 2, [
-                                  /* record */Block.record(["page"], [Block.variant("Loaded", 1, [state[/* page */0][0]])]),
+                                  /* record */Block.record([
+                                      "page",
+                                      "lastTransitionTime"
+                                    ], [
+                                      Block.variant("Loaded", 1, [state[/* page */0][0]]),
+                                      state[/* lastTransitionTime */1]
+                                    ]),
                                   (function () {
                                       return Curry._1(onError, error);
                                     })

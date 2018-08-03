@@ -5,7 +5,7 @@ let (>>) = andThen;
 let toFragment = (fn) => (. a) => fn(a);
 let (~>) = toFragment;
 
-[@bs.module "./externalJsModules/ExecuteSomeService"] external execute : int => int = "execute";
+[@bs.module "./externalJsModules/ExecuteSomeService"] external execute : int => int = "";
 let executeResult = execute(100);
 
 Js.Console.log(executeResult);
@@ -37,6 +37,25 @@ Js.Promise.(
     |> then_(andThen(Js.Console.log, resolve))
 );
 
+type argObj = { .
+  name: string
+};
+
+let sampleArgObj = {
+  pub name = "hoge"
+};
+
+[@bs.deriving abstract]
+type argJsObj = {
+  name: string
+};
+
+[@bs.module "./externalJsModules/ExecuteSomeService"] external executeArgObj : argJsObj => argJsObj = ""
+let _ = {
+  let argJsObjSample = (argJsObj(~name="RYO"));
+  Js.Console.log(executeArgObj(argJsObjSample));
+  Js.Console.log(argJsObjSample |. nameGet)
+};
 
 module IntPromiseWrapperDef = {
   type v = int;

@@ -8,8 +8,10 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var Js_option = require("bs-platform/lib/js/js_option.js");
 var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
+var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
+var CamlinternalOO = require("bs-platform/lib/js/camlinternalOO.js");
 var Page$ReactTemplate = require("./Page.bs.js");
 var Helpers$ReactTemplate = require("./Helpers.bs.js");
 var Routing$ReactTemplate = require("./Routing.bs.js");
@@ -39,11 +41,17 @@ console.log(executeNullableResult);
 
 var executeNullableResultOpt = executeNullableResult === undefined ? undefined : Js_primitive.some(executeNullableResult);
 
-var r = Js_option.map((function (a) {
+function appendOne(param) {
+  return 1 + param | 0;
+}
+
+var __x = Js_option.map((function (a) {
         return 1 + a | 0;
       }), Js_option.map((function (a) {
             return 1 + a | 0;
           }), executeNullableResultOpt));
+
+var r = Belt_Option.map(Belt_Option.map(__x, appendOne), appendOne);
 
 console.log(r);
 
@@ -54,6 +62,26 @@ executePromiseResult.then((function (param) {
         })).then((function (param) {
         return Promise.resolve((console.log(param), /* () */0));
       }));
+
+var $$class = CamlinternalOO.create_table(["name"]);
+
+var name = CamlinternalOO.get_method_label($$class, "name");
+
+CamlinternalOO.set_method($$class, name, (function () {
+        return "hoge";
+      }));
+
+CamlinternalOO.init_class($$class);
+
+var sampleArgObj = CamlinternalOO.create_object_opt(0, $$class);
+
+var argJsObjSample = {
+  name: "RYO"
+};
+
+console.log(ExecuteSomeService.executeArgObj(argJsObjSample));
+
+console.log(argJsObjSample.name);
 
 var IntPromiseWrapperDef = /* module */Block.localModule([], []);
 
@@ -413,6 +441,7 @@ exports.$tilde$great = $tilde$great;
 exports.executeResult = executeResult;
 exports.executeNullableResult = executeNullableResult;
 exports.executePromiseResult = executePromiseResult;
+exports.sampleArgObj = sampleArgObj;
 exports.IntPromiseWrapperDef = IntPromiseWrapperDef;
 exports.IntPromiseWrapper = IntPromiseWrapper;
 exports.whenSuccess = whenSuccess;
