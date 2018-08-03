@@ -54,7 +54,10 @@ type argJsObj = {
 let _ = {
   let argJsObjSample = (argJsObj(~name="RYO"));
   Js.Console.log(executeArgObj(argJsObjSample));
-  Js.Console.log(argJsObjSample |. nameGet)
+  Js.Console.log(argJsObjSample |. nameGet);
+  Js.Console.log({js|りょうた|js});
+  Js.Console.log({j|りょうた|j});
+
 };
 
 module IntPromiseWrapperDef = {

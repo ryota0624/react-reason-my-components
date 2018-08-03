@@ -83,6 +83,10 @@ console.log(ExecuteSomeService.executeArgObj(argJsObjSample));
 
 console.log(argJsObjSample.name);
 
+console.log("りょうた");
+
+console.log("りょうた");
+
 var IntPromiseWrapperDef = /* module */Block.localModule([], []);
 
 var IntPromiseWrapper = PromiseWrapper$ReactTemplate.PromiseWrapper(IntPromiseWrapperDef);
