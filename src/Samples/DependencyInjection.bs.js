@@ -3,6 +3,7 @@
 
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var CamlinternalOO = require("bs-platform/lib/js/camlinternalOO.js");
 
 function ServiceFunctor(C) {
   var apply = function (arg) {
@@ -18,6 +19,36 @@ function Application(S) {
   return /* module */Block.localModule(["run"], [run]);
 }
 
+var $$class = CamlinternalOO.create_table([
+      "serviceA",
+      "serviceB"
+    ]);
+
+var ids = CamlinternalOO.get_method_labels($$class, [
+      "serviceB",
+      "serviceA"
+    ]);
+
+var serviceB = ids[0];
+
+var serviceA = ids[1];
+
+CamlinternalOO.set_methods($$class, /* array */[
+      serviceA,
+      (function (_, value) {
+          return 0 + value | 0;
+        }),
+      serviceB,
+      (function (_, value) {
+          return 100 + value | 0;
+        })
+    ]);
+
+CamlinternalOO.init_class($$class);
+
+var depmodules = CamlinternalOO.create_object_opt(0, $$class);
+
 exports.ServiceFunctor = ServiceFunctor;
 exports.Application = Application;
-/* No side effect */
+exports.depmodules = depmodules;
+/* class Not a pure module */
