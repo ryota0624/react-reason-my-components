@@ -20,7 +20,13 @@ type appRoute =
   | About
   | NotFound;
 
-module MainContentRouting: Routing.Routing = {
+module type GlobalStore = {
+  type action;
+  type state;
+  let store: GlobalStateManagement.Manager.t(action, state);
+};
+
+module MainContentRouting = (Store: GlobalStore): Routing.Routing => {
   type route = appRoute;
   let urlToRoute = (url: ReasonReact.Router.url) =>
     switch (url.path) {
@@ -69,7 +75,7 @@ module App {
     | DetectedError(error) => {...state, error: Some(error)} ==> []
     };
   
-  let globalStore = GlobalStateManagement.Manager.make(reducer, initialState);
+  let store = GlobalStateManagement.Manager.make(reducer, initialState);
 }
 
 
@@ -91,7 +97,7 @@ let header = () => {
 }
 
 
-module MainContent = Routing.Application(MainContentRouting);
+module MainContent = Routing.Application(MainContentRouting(App));
 
 module AppRoot = {
   include App;
@@ -106,8 +112,8 @@ module AppRoot = {
         <MainContent 
           initialPage={blankPage}
           onError=(_ => {
-            let error: error = {messages: ["Some"]};
-            GlobalStateManagement.Manager.dispatch(globalStore, DetectedError(error))
+            let error: error = {messages: ["PagePrepareError"]};
+            GlobalStateManagement.Manager.dispatch(store, DetectedError(error))
           })
           onStartTransition=(() => Js.Console.log("start_transition"))
           onFinishTransition=(() => Js.Console.log("finish_transition"))
@@ -126,6 +132,6 @@ let render = () => ReactDOMRe.renderToElementWithId(
 
 
 let _ = () => {
-  let _ = GlobalStateManagement.Manager.subscribe(App.globalStore, render);
+  let _ = GlobalStateManagement.Manager.subscribe(App.store, render);
   render();
 };
