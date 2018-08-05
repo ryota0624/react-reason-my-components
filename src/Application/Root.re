@@ -16,7 +16,7 @@ module Utils = {
 let (==>) = a => b => (a, b)
 
 type appRoute =
-  | Home
+  | Home(int)
   | About(string)
   | NotFound;
 
@@ -104,13 +104,21 @@ module MainContentRouting = (Store: GlobalStore
   Service: AllExternalSercice
   ): Routing.Routing => {
   module HomePage = MakeHomeContainer(Store, Service);
+
+  let intOfStringOpt = (str) => try (Some(int_of_string(str))) {
+  | Failure(_) => None
+  }
   type route = appRoute;
   let urlToRoute = (url: ReasonReact.Router.url, queryParam) => {
-    open Belt.Map.String;
     switch (url.path) {
-    | ["src", "index.html"] => Home
+    | ["src", "index.html"] => Home(
+      queryParam
+        |> Belt.Map.String.get(_, "name") 
+        |> Belt.Option.flatMap(_, intOfStringOpt) 
+        |> Belt.Option.getWithDefault(_, 0)
+    )
     | ["about"] => About(
-        getWithDefault(queryParam, "name", "default!")
+        Belt.Map.String.getWithDefault(queryParam, "name", "default!")
       )
     | route =>
       Js.Console.log(route);
@@ -119,10 +127,10 @@ module MainContentRouting = (Store: GlobalStore
   }
   let transition = route =>
     switch (route) {
-    | Home =>
+    | Home(number) =>
       Utils.timePromise(3000)
-      |> Js.Promise.then_(v =>
-           <HomePage number=v />
+      |> Js.Promise.then_(_ =>
+           <HomePage number />
            |> Js.Promise.resolve
          )
     | About(name) =>
