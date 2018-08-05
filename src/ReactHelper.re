@@ -4,6 +4,9 @@ let option = op =>
   | None => ReasonReact.null
   };
 
+let andThen = (a, b, v) => b(a(v)); 
+let (>>) = andThen;
+
 let optionalHandler = op =>
   switch (op) {
   | Some(fn) => fn()
@@ -19,3 +22,32 @@ module Fragment = {
       children,
     );
 };
+
+module Router = {
+  module StringMap = Map.Make(String);
+
+  let queryParamStrToTuple = (str: string): option((string, string)) => {
+    switch (Js.String.split("=", str)) {
+    | [|key, value|] => Some((key, value))
+    | _ => None
+    }
+  };
+
+  let optionToArray = (op) => switch (op) {
+  | Some(v) => [|v|]
+  | None => [||]
+  };
+
+  let mapFromArray = pairArray => {
+    let empty = StringMap.empty;
+    pairArray
+      |> Array.fold_left((pre, cur) => StringMap.add(fst(cur), snd(cur), pre), empty)
+  };
+  let routeToqueryParamMap = (route: ReasonReact.Router.url) => {
+    route.search 
+      |> Js.String.split("&")
+      |> Array.map(queryParamStrToTuple >> optionToArray)
+      |> Belt.Array.concatMany
+      |> mapFromArray
+  };
+}

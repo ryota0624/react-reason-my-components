@@ -33,19 +33,3 @@ exports.option = option;
 exports.optionalHandler = optionalHandler;
 exports.Fragment = Fragment;
 /* react Not a pure module */
-
-
-// TODO 移動
-function deleteMail() {
-	try {
-    console.log("start delete click");
-	  document.getElementsByClassName("_op_C2 ms-fwt-r ms-fcl-np o365button")[0].click();
-	  document.getElementsByClassName("contextMenuDropShadow contextMenuPopup removeFocusOutline")	[0].children[0].children[0].children[0].children[0].children[1].children[0].click();
-    document.getElementsByClassName("_fce_W o365button o365buttonOutlined ms-font-m ms-fwt-sb ms-fcl-w ms-bgc-tp ms-bcl-tp ms-bgc-td-f ms-bcl-tdr-f")[0].click();
-    console.log("all click done");
-    setTimeout(() => deleteMail(), 10000);
-	} catch (e) {
-    console.log("fail delete click, restart execute");
-    setTimeout(() => deleteMail(), 1000);
-  }
-}
