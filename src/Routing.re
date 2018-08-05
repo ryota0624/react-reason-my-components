@@ -1,6 +1,12 @@
-module type Routing = {
+module type Routing_ = {
   type route;
   let urlToRoute: ReasonReact.Router.url => route;
+  let transition: route => Js.Promise.t(ReasonReact.reactElement);
+};
+
+module type Routing= {
+  type route;
+  let urlToRoute: (ReasonReact.Router.url, Belt.Map.String.t(string)) => route;
   let transition: route => Js.Promise.t(ReasonReact.reactElement);
 };
 
@@ -45,10 +51,10 @@ module Application = (R: Routing): Content => {
         ~onStartTransition,
         ~onFinishTransition,
       ) => {
-    let transition2 = (url, {ReasonReact.send, ReasonReact.state}) => {
+    let transition = (url, {ReasonReact.send, ReasonReact.state}) => {
       open Js.Promise;
       let startTransitionTime = Js.Date.now();
-      let route = R.urlToRoute(url);
+      let route = R.urlToRoute(url, ReactHelper.Router.routeToqueryParamMap(url));
       send(StartPageLoading(getPageElement(state.page), startTransitionTime));
       R.transition(route)
       |> then_(element => LoadedPage(element, startTransitionTime) |> send |> resolve)
@@ -62,10 +68,10 @@ module Application = (R: Routing): Content => {
       ...component,
       initialState: () => {page: Loaded(initialPage), lastTransitionTime: Js.Date.now()},
       didMount: self => {
-        let id = ReasonReact.Router.watchUrl(self.handle(transition2));
+        let id = ReasonReact.Router.watchUrl(self.handle(transition));
         self.onUnmount(() => ReasonReact.Router.unwatchUrl(id));
         self.handle(
-          transition2,
+          transition,
           ReasonReact.Router.dangerouslyGetInitialUrl(),
         );
       },

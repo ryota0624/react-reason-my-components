@@ -23,9 +23,8 @@ module Fragment = {
     );
 };
 
-module Router = {
-  module StringMap = Map.Make(String);
 
+module Router = {
   let queryParamStrToTuple = (str: string): option((string, string)) => {
     switch (Js.String.split("=", str)) {
     | [|key, value|] => Some((key, value))
@@ -39,9 +38,8 @@ module Router = {
   };
 
   let mapFromArray = pairArray => {
-    let empty = StringMap.empty;
     pairArray
-      |> Array.fold_left((pre, cur) => StringMap.add(fst(cur), snd(cur), pre), empty)
+      |> Belt.Map.String.fromArray
   };
   let routeToqueryParamMap = (route: ReasonReact.Router.url) => {
     route.search 

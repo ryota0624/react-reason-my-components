@@ -4,14 +4,15 @@
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var ReactHelper$ReactTemplate = require("./ReactHelper.bs.js");
 
 function Application(R) {
   var component = ReasonReact.reducerComponent("application");
   var make = function (_, initialPage, onError, onStartTransition, onFinishTransition) {
-    var transition2 = function (url, param) {
+    var transition = function (url, param) {
       var send = param[/* send */3];
       var startTransitionTime = Date.now();
-      var route = Curry._1(R[/* urlToRoute */0], url);
+      var route = Curry._2(R[/* urlToRoute */0], url, ReactHelper$ReactTemplate.Router[/* routeToqueryParamMap */3](url));
       Curry._1(send, /* StartPageLoading */Block.variant("StartPageLoading", 0, [
               param[/* state */1][/* page */0][0],
               startTransitionTime
@@ -49,11 +50,11 @@ function Application(R) {
               component[/* handedOffState */2],
               component[/* willReceiveProps */3],
               (function (self) {
-                  var id = ReasonReact.Router[/* watchUrl */1](Curry._1(self[/* handle */0], transition2));
+                  var id = ReasonReact.Router[/* watchUrl */1](Curry._1(self[/* handle */0], transition));
                   Curry._1(self[/* onUnmount */4], (function () {
                           return ReasonReact.Router[/* unwatchUrl */2](id);
                         }));
-                  return Curry._2(self[/* handle */0], transition2, ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0));
+                  return Curry._2(self[/* handle */0], transition, ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0));
                 }),
               component[/* didUpdate */5],
               component[/* willUnmount */6],

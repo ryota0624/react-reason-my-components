@@ -17,7 +17,7 @@ let (==>) = a => b => (a, b)
 
 type appRoute =
   | Home
-  | About
+  | About(string)
   | NotFound;
 
 module type GlobalStore = {
@@ -105,14 +105,18 @@ module MainContentRouting = (Store: GlobalStore
   ): Routing.Routing => {
   module HomePage = MakeHomeContainer(Store, Service);
   type route = appRoute;
-  let urlToRoute = (url: ReasonReact.Router.url) =>
+  let urlToRoute = (url: ReasonReact.Router.url, queryParam) => {
+    open Belt.Map.String;
     switch (url.path) {
     | ["src", "index.html"] => Home
-    | ["about"] => About
+    | ["about"] => About(
+        getWithDefault(queryParam, "name", "default!")
+      )
     | route =>
       Js.Console.log(route);
       NotFound;
     };
+  }
   let transition = route =>
     switch (route) {
     | Home =>
@@ -121,8 +125,8 @@ module MainContentRouting = (Store: GlobalStore
            <HomePage number=v />
            |> Js.Promise.resolve
          )
-    | About =>
-      Store.renderWithStore(~render=store => <AboutContainer string=(Service.fetchDataAbout("HOGE")) store=store/>) 
+    | About(name) =>
+      Store.renderWithStore(~render=store => <AboutContainer string=(Service.fetchDataAbout(name)) store=store/>) 
         |> Js.Promise.resolve
     | NotFound =>
       <div> (ReasonReact.string("NF")) </div> |> Js.Promise.resolve
@@ -148,10 +152,8 @@ module App {
   
   let store = GlobalStateManagement.Manager.make(reducer, initialState);
 
-  let renderWithStore = (~render) => {
-    render(store)
-  }
-}
+  let renderWithStore = (~render) => render(store)
+};
 
 
 let showErrorModal = (error: App.error, refreshError) => {
@@ -165,20 +167,16 @@ let showErrorModal = (error: App.error, refreshError) => {
 
     <div onClick=((_) => refreshError())/>
   </div>
-}
+};
 
 let header = () => {
   <div>
     (ReasonReact.string("IAM HEADER"))
   </div>
-}
-
-
+};
 
 module AppRoot = (MainContent: Routing.Content) => {
   open ReactHelper;
-
-  /* module MainContent = Routing.Application(MainContentRouting(App, AllExternalSerciceImpl)); */
   let blankPage = <div className="loading"> </div>;
   let component = ReasonReact.statelessComponent("AppRoot");
   let make = (~store, _children) => {

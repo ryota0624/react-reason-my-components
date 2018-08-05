@@ -8,6 +8,7 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Belt_MapString = require("bs-platform/lib/js/belt_MapString.js");
 var Routing$ReactTemplate = require("../Routing.bs.js");
 var ReactHelper$ReactTemplate = require("../ReactHelper.bs.js");
 var GlobalStateManagement$ReactTemplate = require("../Samples/GlobalStateManagement.bs.js");
@@ -192,16 +193,16 @@ function MainContentRouting(Store) {
                   component[/* jsElementWrapped */14]
                 ]);
       };
-      var urlToRoute = function (url) {
+      var urlToRoute = function (url, queryParam) {
         var route = url[/* path */0];
         if (route) {
           switch (route[0]) {
             case "about" : 
                 if (route[1]) {
                   console.log(route);
-                  return /* NotFound */2;
+                  return /* NotFound */1;
                 } else {
-                  return /* About */1;
+                  return /* About */Block.simpleVariant("About", [Belt_MapString.getWithDefault(queryParam, "name", "default!")]);
                 }
             case "src" : 
                 var match = route[1];
@@ -209,40 +210,41 @@ function MainContentRouting(Store) {
                   if (match[0] === "index.html") {
                     if (match[1]) {
                       console.log(route);
-                      return /* NotFound */2;
+                      return /* NotFound */1;
                     } else {
                       return /* Home */0;
                     }
                   } else {
                     console.log(route);
-                    return /* NotFound */2;
+                    return /* NotFound */1;
                   }
                 } else {
                   console.log(route);
-                  return /* NotFound */2;
+                  return /* NotFound */1;
                 }
             default:
               console.log(route);
-              return /* NotFound */2;
+              return /* NotFound */1;
           }
         } else {
           console.log(route);
-          return /* NotFound */2;
+          return /* NotFound */1;
         }
       };
       var transition = function (route) {
-        switch (route) {
-          case 0 : 
-              return timePromise(3000).then((function (v) {
-                            return Promise.resolve(ReasonReact.element(undefined, undefined, make$1(v, /* array */[])));
-                          }));
-          case 1 : 
-              return Promise.resolve(Curry._1(Store[/* renderWithStore */1], (function (store) {
-                                return ReasonReact.element(undefined, undefined, make(Curry._1(Service[/* fetchDataAbout */1], "HOGE"), store, /* array */[]));
-                              })));
-          case 2 : 
-              return Promise.resolve(React.createElement("div", undefined, "NF"));
-          
+        if (typeof route === "number") {
+          if (route !== 0) {
+            return Promise.resolve(React.createElement("div", undefined, "NF"));
+          } else {
+            return timePromise(3000).then((function (v) {
+                          return Promise.resolve(ReasonReact.element(undefined, undefined, make$1(v, /* array */[])));
+                        }));
+          }
+        } else {
+          var name = route[0];
+          return Promise.resolve(Curry._1(Store[/* renderWithStore */1], (function (store) {
+                            return ReasonReact.element(undefined, undefined, make(Curry._1(Service[/* fetchDataAbout */1], name), store, /* array */[]));
+                          })));
         }
       };
       return /* module */Block.localModule([
@@ -428,16 +430,16 @@ var MainContent = Routing$ReactTemplate.Application((function (Service) {
                       component[/* jsElementWrapped */14]
                     ]);
           };
-          var urlToRoute = function (url) {
+          var urlToRoute = function (url, queryParam) {
             var route = url[/* path */0];
             if (route) {
               switch (route[0]) {
                 case "about" : 
                     if (route[1]) {
                       console.log(route);
-                      return /* NotFound */2;
+                      return /* NotFound */1;
                     } else {
-                      return /* About */1;
+                      return /* About */Block.simpleVariant("About", [Belt_MapString.getWithDefault(queryParam, "name", "default!")]);
                     }
                 case "src" : 
                     var match = route[1];
@@ -445,38 +447,38 @@ var MainContent = Routing$ReactTemplate.Application((function (Service) {
                       if (match[0] === "index.html") {
                         if (match[1]) {
                           console.log(route);
-                          return /* NotFound */2;
+                          return /* NotFound */1;
                         } else {
                           return /* Home */0;
                         }
                       } else {
                         console.log(route);
-                        return /* NotFound */2;
+                        return /* NotFound */1;
                       }
                     } else {
                       console.log(route);
-                      return /* NotFound */2;
+                      return /* NotFound */1;
                     }
                 default:
                   console.log(route);
-                  return /* NotFound */2;
+                  return /* NotFound */1;
               }
             } else {
               console.log(route);
-              return /* NotFound */2;
+              return /* NotFound */1;
             }
           };
           var transition = function (route) {
-            switch (route) {
-              case 0 : 
-                  return timePromise(3000).then((function (v) {
-                                return Promise.resolve(ReasonReact.element(undefined, undefined, make$1(v, /* array */[])));
-                              }));
-              case 1 : 
-                  return Promise.resolve(ReasonReact.element(undefined, undefined, make(Curry._1(Service[/* fetchDataAbout */1], "HOGE"), store, /* array */[])));
-              case 2 : 
-                  return Promise.resolve(React.createElement("div", undefined, "NF"));
-              
+            if (typeof route === "number") {
+              if (route !== 0) {
+                return Promise.resolve(React.createElement("div", undefined, "NF"));
+              } else {
+                return timePromise(3000).then((function (v) {
+                              return Promise.resolve(ReasonReact.element(undefined, undefined, make$1(v, /* array */[])));
+                            }));
+              }
+            } else {
+              return Promise.resolve(ReasonReact.element(undefined, undefined, make(Curry._1(Service[/* fetchDataAbout */1], route[0]), store, /* array */[])));
             }
           };
           return /* module */Block.localModule([

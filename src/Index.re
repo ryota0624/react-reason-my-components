@@ -156,7 +156,7 @@ type sampleRoute =
 
 module SampleRouting: Routing.Routing = {
   type route = sampleRoute;
-  let urlToRoute = (url: ReasonReact.Router.url) =>
+  let urlToRoute = (url: ReasonReact.Router.url, _) =>
     switch (url.path) {
     | ["src", "index.html"] => Home
     | ["about"] => About
