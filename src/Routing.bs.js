@@ -6,9 +6,6 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 
 function Application(R) {
-  var getPageElement = function (page) {
-    return page[0];
-  };
   var component = ReasonReact.reducerComponent("application");
   var make = function (_, initialPage, onError, onStartTransition, onFinishTransition) {
     var transition2 = function (url, param) {
@@ -128,15 +125,7 @@ function Application(R) {
               component[/* jsElementWrapped */14]
             ]);
   };
-  return /* module */Block.localModule([
-            "getPageElement",
-            "component",
-            "make"
-          ], [
-            getPageElement,
-            component,
-            make
-          ]);
+  return /* module */Block.localModule(["make"], [make]);
 }
 
 exports.Application = Application;

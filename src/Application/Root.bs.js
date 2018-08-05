@@ -30,119 +30,81 @@ function $eq$eq$great(a, b) {
         ];
 }
 
-function urlToRoute(url) {
-  var route = url[/* path */0];
-  if (route) {
-    switch (route[0]) {
-      case "about" : 
-          if (route[1]) {
-            console.log(route);
-            return /* NotFound */2;
-          } else {
-            return /* About */1;
-          }
-      case "src" : 
-          var match = route[1];
-          if (match) {
-            if (match[0] === "index.html") {
-              if (match[1]) {
-                console.log(route);
-                return /* NotFound */2;
-              } else {
-                return /* Home */0;
-              }
-            } else {
-              console.log(route);
-              return /* NotFound */2;
-            }
-          } else {
-            console.log(route);
-            return /* NotFound */2;
-          }
-      default:
-        console.log(route);
-        return /* NotFound */2;
-    }
-  } else {
-    console.log(route);
-    return /* NotFound */2;
-  }
+function fetchDataHome(str) {
+  return str + "!";
 }
 
-function transition(route) {
-  switch (route) {
-    case 0 : 
-        return timePromise(3000).then((function (v) {
-                      return Promise.resolve(React.createElement("div", undefined, String(v)));
-                    }));
-    case 1 : 
-        return Promise.resolve(React.createElement("div", undefined, "About"));
-    case 2 : 
-        return Promise.resolve(React.createElement("div", undefined, "NF"));
-    
-  }
+var HomeExternalServiceImpl = /* module */Block.localModule(["fetchDataHome"], [fetchDataHome]);
+
+function fetchDataAbout(str) {
+  return str + "!";
 }
 
-var MainContentRouting = /* module */Block.localModule([
-    "urlToRoute",
-    "transition"
+var AboutExternalServiceImpl = /* module */Block.localModule(["fetchDataAbout"], [fetchDataAbout]);
+
+var AllExternalSerciceImpl = /* module */Block.localModule([
+    "fetchDataHome",
+    "fetchDataAbout"
   ], [
-    urlToRoute,
-    transition
+    fetchDataHome,
+    fetchDataAbout
   ]);
 
-var initialState = /* record */Block.record([
-    "error",
-    "notification"
-  ], [
-    undefined,
-    undefined
-  ]);
+var StateManagementDef = /* module */Block.localModule([], []);
 
-function reducer(action, state) {
-  return /* tuple */[
-          /* record */Block.record([
-              "error",
-              "notification"
-            ], [
-              action[0],
-              state[/* notification */1]
-            ]),
-          /* [] */0
-        ];
-}
-
-var globalStore = GlobalStateManagement$ReactTemplate.Manager[/* make */5](reducer, initialState);
-
-var App = /* module */Block.localModule([
-    "initialState",
-    "reducer",
-    "globalStore"
-  ], [
-    initialState,
-    reducer,
-    globalStore
-  ]);
-
-function showErrorModal(error) {
-  return React.createElement("div", undefined, $$Array.of_list(List.map((function (prim) {
-                        return prim;
-                      }), error[/* messages */0])));
-}
-
-function header() {
-  return React.createElement("div", undefined, "IAM HEADER");
-}
-
-var MainContent = Routing$ReactTemplate.Application(MainContentRouting);
-
-var blankPage = React.createElement("div", {
-      className: "loading"
+function MakeHomeContainer() {
+  return (function (HomeExternalService) {
+      var component = ReasonReact.statelessComponent("MakeHomeContainer");
+      var make = function (number, _) {
+        return /* record */Block.record([
+                  "debugName",
+                  "reactClassInternal",
+                  "handedOffState",
+                  "willReceiveProps",
+                  "didMount",
+                  "didUpdate",
+                  "willUnmount",
+                  "willUpdate",
+                  "shouldUpdate",
+                  "render",
+                  "initialState",
+                  "retainedProps",
+                  "reducer",
+                  "subscriptions",
+                  "jsElementWrapped"
+                ], [
+                  component[/* debugName */0],
+                  component[/* reactClassInternal */1],
+                  component[/* handedOffState */2],
+                  component[/* willReceiveProps */3],
+                  component[/* didMount */4],
+                  component[/* didUpdate */5],
+                  component[/* willUnmount */6],
+                  component[/* willUpdate */7],
+                  component[/* shouldUpdate */8],
+                  (function () {
+                      return React.createElement("div", undefined, React.createElement("div", undefined, String(number)), Curry._1(HomeExternalService[/* fetchDataHome */0], "HOME"));
+                    }),
+                  component[/* initialState */10],
+                  component[/* retainedProps */11],
+                  component[/* reducer */12],
+                  component[/* subscriptions */13],
+                  component[/* jsElementWrapped */14]
+                ]);
+      };
+      return /* module */Block.localModule([
+                "component",
+                "make"
+              ], [
+                component,
+                make
+              ]);
     });
+}
 
-var component = ReasonReact.statelessComponent("AppRoot");
+var component = ReasonReact.statelessComponent("AboutContainer");
 
-function make() {
+function make(string, store, _) {
   return /* record */Block.record([
             "debugName",
             "reactClassInternal",
@@ -170,11 +132,401 @@ function make() {
             component[/* willUpdate */7],
             component[/* shouldUpdate */8],
             (function () {
+                GlobalStateManagement$ReactTemplate.Manager[/* getState */2](store);
+                return React.createElement("div", undefined, React.createElement("div", undefined, string));
+              }),
+            component[/* initialState */10],
+            component[/* retainedProps */11],
+            component[/* reducer */12],
+            component[/* subscriptions */13],
+            component[/* jsElementWrapped */14]
+          ]);
+}
+
+var AboutContainer = /* module */Block.localModule([
+    "component",
+    "make"
+  ], [
+    component,
+    make
+  ]);
+
+function MainContentRouting(Store) {
+  return (function (Service) {
+      var HomeExternalService = [Service[0]];
+      var component = ReasonReact.statelessComponent("MakeHomeContainer");
+      var make$1 = function (number, _) {
+        return /* record */Block.record([
+                  "debugName",
+                  "reactClassInternal",
+                  "handedOffState",
+                  "willReceiveProps",
+                  "didMount",
+                  "didUpdate",
+                  "willUnmount",
+                  "willUpdate",
+                  "shouldUpdate",
+                  "render",
+                  "initialState",
+                  "retainedProps",
+                  "reducer",
+                  "subscriptions",
+                  "jsElementWrapped"
+                ], [
+                  component[/* debugName */0],
+                  component[/* reactClassInternal */1],
+                  component[/* handedOffState */2],
+                  component[/* willReceiveProps */3],
+                  component[/* didMount */4],
+                  component[/* didUpdate */5],
+                  component[/* willUnmount */6],
+                  component[/* willUpdate */7],
+                  component[/* shouldUpdate */8],
+                  (function () {
+                      return React.createElement("div", undefined, React.createElement("div", undefined, String(number)), Curry._1(HomeExternalService[/* fetchDataHome */0], "HOME"));
+                    }),
+                  component[/* initialState */10],
+                  component[/* retainedProps */11],
+                  component[/* reducer */12],
+                  component[/* subscriptions */13],
+                  component[/* jsElementWrapped */14]
+                ]);
+      };
+      var urlToRoute = function (url) {
+        var route = url[/* path */0];
+        if (route) {
+          switch (route[0]) {
+            case "about" : 
+                if (route[1]) {
+                  console.log(route);
+                  return /* NotFound */2;
+                } else {
+                  return /* About */1;
+                }
+            case "src" : 
+                var match = route[1];
+                if (match) {
+                  if (match[0] === "index.html") {
+                    if (match[1]) {
+                      console.log(route);
+                      return /* NotFound */2;
+                    } else {
+                      return /* Home */0;
+                    }
+                  } else {
+                    console.log(route);
+                    return /* NotFound */2;
+                  }
+                } else {
+                  console.log(route);
+                  return /* NotFound */2;
+                }
+            default:
+              console.log(route);
+              return /* NotFound */2;
+          }
+        } else {
+          console.log(route);
+          return /* NotFound */2;
+        }
+      };
+      var transition = function (route) {
+        switch (route) {
+          case 0 : 
+              return timePromise(3000).then((function (v) {
+                            return Promise.resolve(ReasonReact.element(undefined, undefined, make$1(v, /* array */[])));
+                          }));
+          case 1 : 
+              return Promise.resolve(Curry._1(Store[/* renderWithStore */1], (function (store) {
+                                return ReasonReact.element(undefined, undefined, make(Curry._1(Service[/* fetchDataAbout */1], "HOGE"), store, /* array */[]));
+                              })));
+          case 2 : 
+              return Promise.resolve(React.createElement("div", undefined, "NF"));
+          
+        }
+      };
+      return /* module */Block.localModule([
+                "urlToRoute",
+                "transition"
+              ], [
+                urlToRoute,
+                transition
+              ]);
+    });
+}
+
+var initialState = /* record */Block.record([
+    "error",
+    "notification"
+  ], [
+    undefined,
+    undefined
+  ]);
+
+function reducer(action, state) {
+  if (action) {
+    return /* tuple */[
+            /* record */Block.record([
+                "error",
+                "notification"
+              ], [
+                action[0],
+                state[/* notification */1]
+              ]),
+            /* [] */0
+          ];
+  } else {
+    return /* tuple */[
+            /* record */Block.record([
+                "error",
+                "notification"
+              ], [
+                undefined,
+                state[/* notification */1]
+              ]),
+            /* [] */0
+          ];
+  }
+}
+
+var store = GlobalStateManagement$ReactTemplate.Manager[/* make */5](reducer, initialState);
+
+function renderWithStore(render) {
+  return Curry._1(render, store);
+}
+
+var App = /* module */Block.localModule([
+    "initialState",
+    "reducer",
+    "store",
+    "renderWithStore"
+  ], [
+    initialState,
+    reducer,
+    store,
+    renderWithStore
+  ]);
+
+function showErrorModal(error, refreshError) {
+  return React.createElement("div", undefined, $$Array.of_list(List.map((function (prim) {
+                        return prim;
+                      }), error[/* messages */0])), React.createElement("div", {
+                  onClick: (function () {
+                      return Curry._1(refreshError, /* () */0);
+                    })
+                }));
+}
+
+function header() {
+  return React.createElement("div", undefined, "IAM HEADER");
+}
+
+function AppRoot(MainContent) {
+  var blankPage = React.createElement("div", {
+        className: "loading"
+      });
+  var component = ReasonReact.statelessComponent("AppRoot");
+  var make = function (store, _) {
+    return /* record */Block.record([
+              "debugName",
+              "reactClassInternal",
+              "handedOffState",
+              "willReceiveProps",
+              "didMount",
+              "didUpdate",
+              "willUnmount",
+              "willUpdate",
+              "shouldUpdate",
+              "render",
+              "initialState",
+              "retainedProps",
+              "reducer",
+              "subscriptions",
+              "jsElementWrapped"
+            ], [
+              component[/* debugName */0],
+              component[/* reactClassInternal */1],
+              component[/* handedOffState */2],
+              component[/* willReceiveProps */3],
+              component[/* didMount */4],
+              component[/* didUpdate */5],
+              component[/* willUnmount */6],
+              component[/* willUpdate */7],
+              component[/* shouldUpdate */8],
+              (function () {
+                  return ReasonReact.element(undefined, undefined, ReactHelper$ReactTemplate.Fragment[/* make */0](/* array */[
+                                  header(/* () */0),
+                                  ReasonReact.element(undefined, undefined, Curry._5(MainContent[/* make */0], /* array */[], blankPage, (function () {
+                                              return GlobalStateManagement$ReactTemplate.Manager[/* dispatch */6](store, /* DetectedError */Block.simpleVariant("DetectedError", [/* record */Block.record(["messages"], [Block.simpleVariant("::", [
+                                                                    "PagePrepareError",
+                                                                    /* [] */0
+                                                                  ])])]));
+                                            }), (function () {
+                                              console.log("start_transition");
+                                              return /* () */0;
+                                            }), (function () {
+                                              console.log("finish_transition");
+                                              return /* () */0;
+                                            })))
+                                ]));
+                }),
+              component[/* initialState */10],
+              component[/* retainedProps */11],
+              component[/* reducer */12],
+              component[/* subscriptions */13],
+              component[/* jsElementWrapped */14]
+            ]);
+  };
+  return /* module */Block.localModule([
+            "blankPage",
+            "component",
+            "make"
+          ], [
+            blankPage,
+            component,
+            make
+          ]);
+}
+
+var MainContent = Routing$ReactTemplate.Application((function (Service) {
+          var HomeExternalService = [Service[0]];
+          var component = ReasonReact.statelessComponent("MakeHomeContainer");
+          var make$1 = function (number, _) {
+            return /* record */Block.record([
+                      "debugName",
+                      "reactClassInternal",
+                      "handedOffState",
+                      "willReceiveProps",
+                      "didMount",
+                      "didUpdate",
+                      "willUnmount",
+                      "willUpdate",
+                      "shouldUpdate",
+                      "render",
+                      "initialState",
+                      "retainedProps",
+                      "reducer",
+                      "subscriptions",
+                      "jsElementWrapped"
+                    ], [
+                      component[/* debugName */0],
+                      component[/* reactClassInternal */1],
+                      component[/* handedOffState */2],
+                      component[/* willReceiveProps */3],
+                      component[/* didMount */4],
+                      component[/* didUpdate */5],
+                      component[/* willUnmount */6],
+                      component[/* willUpdate */7],
+                      component[/* shouldUpdate */8],
+                      (function () {
+                          return React.createElement("div", undefined, React.createElement("div", undefined, String(number)), Curry._1(HomeExternalService[/* fetchDataHome */0], "HOME"));
+                        }),
+                      component[/* initialState */10],
+                      component[/* retainedProps */11],
+                      component[/* reducer */12],
+                      component[/* subscriptions */13],
+                      component[/* jsElementWrapped */14]
+                    ]);
+          };
+          var urlToRoute = function (url) {
+            var route = url[/* path */0];
+            if (route) {
+              switch (route[0]) {
+                case "about" : 
+                    if (route[1]) {
+                      console.log(route);
+                      return /* NotFound */2;
+                    } else {
+                      return /* About */1;
+                    }
+                case "src" : 
+                    var match = route[1];
+                    if (match) {
+                      if (match[0] === "index.html") {
+                        if (match[1]) {
+                          console.log(route);
+                          return /* NotFound */2;
+                        } else {
+                          return /* Home */0;
+                        }
+                      } else {
+                        console.log(route);
+                        return /* NotFound */2;
+                      }
+                    } else {
+                      console.log(route);
+                      return /* NotFound */2;
+                    }
+                default:
+                  console.log(route);
+                  return /* NotFound */2;
+              }
+            } else {
+              console.log(route);
+              return /* NotFound */2;
+            }
+          };
+          var transition = function (route) {
+            switch (route) {
+              case 0 : 
+                  return timePromise(3000).then((function (v) {
+                                return Promise.resolve(ReasonReact.element(undefined, undefined, make$1(v, /* array */[])));
+                              }));
+              case 1 : 
+                  return Promise.resolve(ReasonReact.element(undefined, undefined, make(Curry._1(Service[/* fetchDataAbout */1], "HOGE"), store, /* array */[])));
+              case 2 : 
+                  return Promise.resolve(React.createElement("div", undefined, "NF"));
+              
+            }
+          };
+          return /* module */Block.localModule([
+                    "urlToRoute",
+                    "transition"
+                  ], [
+                    urlToRoute,
+                    transition
+                  ]);
+        })(AllExternalSerciceImpl));
+
+var blankPage = React.createElement("div", {
+      className: "loading"
+    });
+
+var component$1 = ReasonReact.statelessComponent("AppRoot");
+
+function make$1(store, _) {
+  return /* record */Block.record([
+            "debugName",
+            "reactClassInternal",
+            "handedOffState",
+            "willReceiveProps",
+            "didMount",
+            "didUpdate",
+            "willUnmount",
+            "willUpdate",
+            "shouldUpdate",
+            "render",
+            "initialState",
+            "retainedProps",
+            "reducer",
+            "subscriptions",
+            "jsElementWrapped"
+          ], [
+            component$1[/* debugName */0],
+            component$1[/* reactClassInternal */1],
+            component$1[/* handedOffState */2],
+            component$1[/* willReceiveProps */3],
+            component$1[/* didMount */4],
+            component$1[/* didUpdate */5],
+            component$1[/* willUnmount */6],
+            component$1[/* willUpdate */7],
+            component$1[/* shouldUpdate */8],
+            (function () {
                 return ReasonReact.element(undefined, undefined, ReactHelper$ReactTemplate.Fragment[/* make */0](/* array */[
                                 header(/* () */0),
-                                ReasonReact.element(undefined, undefined, Curry._5(MainContent[/* make */2], /* array */[], blankPage, (function () {
-                                            return GlobalStateManagement$ReactTemplate.Manager[/* dispatch */6](globalStore, /* DetectedError */Block.simpleVariant("DetectedError", [/* record */Block.record(["messages"], [Block.simpleVariant("::", [
-                                                                  "Some",
+                                ReasonReact.element(undefined, undefined, Curry._5(MainContent[/* make */0], /* array */[], blankPage, (function () {
+                                            return GlobalStateManagement$ReactTemplate.Manager[/* dispatch */6](store, /* DetectedError */Block.simpleVariant("DetectedError", [/* record */Block.record(["messages"], [Block.simpleVariant("::", [
+                                                                  "PagePrepareError",
                                                                   /* [] */0
                                                                 ])])]));
                                           }), (function () {
@@ -186,41 +538,41 @@ function make() {
                                           })))
                               ]));
               }),
-            component[/* initialState */10],
-            component[/* retainedProps */11],
-            component[/* reducer */12],
-            component[/* subscriptions */13],
-            component[/* jsElementWrapped */14]
+            component$1[/* initialState */10],
+            component$1[/* retainedProps */11],
+            component$1[/* reducer */12],
+            component$1[/* subscriptions */13],
+            component$1[/* jsElementWrapped */14]
           ]);
 }
 
-var AppRoot = /* module */Block.localModule([
-    "initialState",
-    "reducer",
-    "globalStore",
+var AppRootImpl = /* module */Block.localModule([
     "blankPage",
     "component",
     "make"
   ], [
-    initialState,
-    reducer,
-    globalStore,
     blankPage,
-    component,
-    make
+    component$1,
+    make$1
   ]);
 
 function render() {
-  return ReactDOMRe.renderToElementWithId(ReasonReact.element(undefined, undefined, make(/* array */[])), "index");
+  return ReactDOMRe.renderToElementWithId(ReasonReact.element(undefined, undefined, make$1(store, /* array */[])), "index");
 }
 
 exports.Utils = Utils;
 exports.$eq$eq$great = $eq$eq$great;
+exports.HomeExternalServiceImpl = HomeExternalServiceImpl;
+exports.AboutExternalServiceImpl = AboutExternalServiceImpl;
+exports.AllExternalSerciceImpl = AllExternalSerciceImpl;
+exports.StateManagementDef = StateManagementDef;
+exports.MakeHomeContainer = MakeHomeContainer;
+exports.AboutContainer = AboutContainer;
 exports.MainContentRouting = MainContentRouting;
 exports.App = App;
 exports.showErrorModal = showErrorModal;
 exports.header = header;
-exports.MainContent = MainContent;
 exports.AppRoot = AppRoot;
+exports.AppRootImpl = AppRootImpl;
 exports.render = render;
-/* globalStore Not a pure module */
+/* component Not a pure module */

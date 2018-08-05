@@ -4,7 +4,21 @@ module type Routing = {
   let transition: route => Js.Promise.t(ReasonReact.reactElement);
 };
 
-module Application = (R: Routing) => {
+module type Content = {
+  type page;
+
+  type state;
+
+  type action;
+
+  let make: ('a, ~initialPage: ReasonReact.reactElement,
+  ~onError: Js.Promise.error => unit, ~onStartTransition: unit => unit,
+  ~onFinishTransition: unit => unit) =>
+  ReasonReact.componentSpec(state, state, ReasonReact.noRetainedProps,
+                             ReasonReact.noRetainedProps, action)
+};
+
+module Application = (R: Routing): Content => {
   type page =
     | InTransition(ReasonReact.reactElement)
     | Loaded(ReasonReact.reactElement);

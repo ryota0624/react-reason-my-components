@@ -28,6 +28,33 @@ module type GlobalStore = {
   let renderWithStore: (~render: GlobalStateManagement.Manager.t(action, state) => ReasonReact.reactElement) => ReasonReact.reactElement;
 };
 
+module type HomeExternalService = {
+  let fetchDataHome: string => string;
+};
+
+
+module type AboutExternalService = {
+  let fetchDataAbout: string => string;
+};
+
+module HomeExternalServiceImpl: HomeExternalService = {
+  let fetchDataHome = str => str ++ "!"
+};
+
+module AboutExternalServiceImpl: AboutExternalService = {
+  let fetchDataAbout = str => str ++ "!"
+};
+
+module type AllExternalSercice = {
+  include HomeExternalService;
+  include AboutExternalService;
+};
+
+module AllExternalSerciceImpl: AllExternalSercice = {
+  include HomeExternalServiceImpl;
+  include AboutExternalServiceImpl;
+}
+
 module StateManagementDef = {
   type error = {
     messages: list(string),
@@ -45,12 +72,15 @@ module StateManagementDef = {
   };
 }
 
-module MakeHomeContainer = (Store: GlobalStore) => {
+module MakeHomeContainer = (Store: GlobalStore, HomeExternalService: HomeExternalService) => {
   let component = ReasonReact.statelessComponent("MakeHomeContainer");
   let make = (~number, _children) => {
     ...component,
     render: (_) => {
-      <div> (number |> string_of_int |> ReasonReact.string) </div>
+      <div>
+        <div> (number |> string_of_int |> ReasonReact.string) </div>
+        (ReasonReact.string(HomeExternalService.fetchDataHome("HOME")))
+      </div>
     } 
   }
 }
@@ -70,9 +100,10 @@ module AboutContainer = {
 
 module MainContentRouting = (Store: GlobalStore
   with type action = StateManagementDef.action
-  with type state = StateManagementDef.state
+  with type state = StateManagementDef.state,
+  Service: AllExternalSercice
   ): Routing.Routing => {
-  module HomePage = MakeHomeContainer(Store);
+  module HomePage = MakeHomeContainer(Store, Service);
   type route = appRoute;
   let urlToRoute = (url: ReasonReact.Router.url) =>
     switch (url.path) {
@@ -91,12 +122,14 @@ module MainContentRouting = (Store: GlobalStore
            |> Js.Promise.resolve
          )
     | About =>
-      Store.renderWithStore(~render=store => <AboutContainer string="" store=store/>) 
+      Store.renderWithStore(~render=store => <AboutContainer string=(Service.fetchDataAbout("HOGE")) store=store/>) 
         |> Js.Promise.resolve
     | NotFound =>
       <div> (ReasonReact.string("NF")) </div> |> Js.Promise.resolve
     };
 };
+
+
 
 
 module App {
@@ -142,22 +175,22 @@ let header = () => {
 
 
 
-module AppRoot = {
-  include App;
-  module MainContent = Routing.Application(MainContentRouting(App));
-  let blankPage = <div className="loading"> </div>;
+module AppRoot = (MainContent: Routing.Content) => {
   open ReactHelper;
+
+  /* module MainContent = Routing.Application(MainContentRouting(App, AllExternalSerciceImpl)); */
+  let blankPage = <div className="loading"> </div>;
   let component = ReasonReact.statelessComponent("AppRoot");
-  let make = (_children) => {
+  let make = (~store, _children) => {
     ...component,
     render: _ => {
       <Fragment>
         (header())
-        <MainContent 
+        <MainContent
           initialPage={blankPage}
           onError=(_ => {
-            let error: error = {messages: ["PagePrepareError"]};
-            GlobalStateManagement.Manager.dispatch(store, DetectedError(error))
+            let error: App.error = {messages: ["PagePrepareError"]};
+            GlobalStateManagement.Manager.dispatch(store, App.DetectedError(error))
           })
           onStartTransition=(() => Js.Console.log("start_transition"))
           onFinishTransition=(() => Js.Console.log("finish_transition"))
@@ -169,8 +202,10 @@ module AppRoot = {
 };
 
 
+module AppRootImpl = AppRoot(Routing.Application(MainContentRouting(App, AllExternalSerciceImpl)));
+
 let render = () => ReactDOMRe.renderToElementWithId(
-  <AppRoot />
+  <AppRootImpl store=(App.store)/>
   , "index",
 );
 
