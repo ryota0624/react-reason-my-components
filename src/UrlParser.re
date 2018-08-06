@@ -1,4 +1,4 @@
-open Belt;
+/* open Belt;
 open ReasonReact.Router;
 
 type state('value) = {
@@ -11,7 +11,7 @@ type state('value) = {
 type parser('a, 'b) =
   Parser(state('a) => list(state('b)));
 
-let custom = (_: string, stringToValue) =>
+let custom = (_: string, stringToValue: (string => Result.t('a, string))) =>
   Parser(({visited, unvisited, params, value}) => {
     switch (unvisited) {
     | [] => []
@@ -29,7 +29,28 @@ let custom = (_: string, stringToValue) =>
       };
     };
   });
+
+let s = (str) => Parser(({visited, unvisited, params, value}) => {
+  switch (unvisited) {
+  | [] => []
+  | [next, ...rest] => if (next == str) {
+      [ {
+        visited: List.concat([next], visited),
+        unvisited: rest,
+        params,
+        value
+      } ]
+    } else []
+  };
+});
   
+/* let string: parser((string => 'a), 'a)  = custom("STRING", ((v: string) => Result.Ok(v)));
+
+let int: parser((int => 'a), 'a) = custom("INT", (v => {
+  try(Ok(int_of_string(v))) {
+  | Failure(msg) => Result.Error(msg)
+  }
+})); */
   
 let (<//>) = (Parser(parseBefore), Parser(parseAfter)) => 
   Parser(
@@ -84,12 +105,25 @@ let rec parseHelp = (states) => switch (states) {
   | segments => segments
   };
 
-let parse = (Parser(parse), url, params) => {
+let parse = (Parser(parse), parsedUrl, params) => {
   parseHelp(parse({
     visited: [], 
-    unvisited: splitUrl(url),
+    unvisited: parsedUrl,
     params: params,
     value: (v => v)
   }))
 };
 
+let parseRouterUrl = (parser, url: ReasonReact.Router.url) => 
+  parse(parser, url.path, ReactHelper.Router.routeToqueryParamMap(url));
+
+type route = Home(string, int) | AB;
+let home = (v1, v2) => Home(v1, v2);
+module Sample {
+  
+
+  let _ = () => {
+    let parser = top <//> s("about") <//> s("user");
+    let ur = map(home, parser);
+  }
+}; */
