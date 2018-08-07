@@ -212,7 +212,9 @@ let userTreeSample = {
   tree;
 };
 
-Js.Console.log(userTreeSample);
+/* Js.Console.log(userTreeSample); */
+
+let _ = UrlParser.Sample.start();
 
 ReactDOMRe.renderToElementWithId(
   <div>
@@ -258,3 +260,5 @@ ReactDOMRe.renderToElementWithId(
   </div>,
   "index",
 );
+
+

@@ -6,10 +6,14 @@ var $$Array = require("bs-platform/lib/js/array.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
+var Js_exn = require("bs-platform/lib/js/js_exn.js");
 var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
+var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
+var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Belt_MapString = require("bs-platform/lib/js/belt_MapString.js");
 var Routing$ReactTemplate = require("../Routing.bs.js");
+var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 var ReactHelper$ReactTemplate = require("../ReactHelper.bs.js");
 var GlobalStateManagement$ReactTemplate = require("../Samples/GlobalStateManagement.bs.js");
 
@@ -193,6 +197,19 @@ function MainContentRouting(Store) {
                   component[/* jsElementWrapped */14]
                 ]);
       };
+      var intOfStringOpt = function (str) {
+        try {
+          return Caml_format.caml_int_of_string(str);
+        }
+        catch (raw_exn){
+          var exn = Js_exn.internalToOCamlException(raw_exn);
+          if (exn[0] === Caml_builtin_exceptions.failure) {
+            return undefined;
+          } else {
+            throw exn;
+          }
+        }
+      };
       var urlToRoute = function (url, queryParam) {
         var route = url[/* path */0];
         if (route) {
@@ -200,9 +217,9 @@ function MainContentRouting(Store) {
             case "about" : 
                 if (route[1]) {
                   console.log(route);
-                  return /* NotFound */1;
+                  return /* NotFound */0;
                 } else {
-                  return /* About */Block.simpleVariant("About", [Belt_MapString.getWithDefault(queryParam, "name", "default!")]);
+                  return /* About */Block.variant("About", 1, [Belt_MapString.getWithDefault(queryParam, "name", "default!")]);
                 }
             case "src" : 
                 var match = route[1];
@@ -210,41 +227,42 @@ function MainContentRouting(Store) {
                   if (match[0] === "index.html") {
                     if (match[1]) {
                       console.log(route);
-                      return /* NotFound */1;
+                      return /* NotFound */0;
                     } else {
-                      return /* Home */0;
+                      var __x = Belt_MapString.get(queryParam, "name");
+                      var __x$1 = Belt_Option.flatMap(__x, intOfStringOpt);
+                      return /* Home */Block.variant("Home", 0, [Belt_Option.getWithDefault(__x$1, 0)]);
                     }
                   } else {
                     console.log(route);
-                    return /* NotFound */1;
+                    return /* NotFound */0;
                   }
                 } else {
                   console.log(route);
-                  return /* NotFound */1;
+                  return /* NotFound */0;
                 }
             default:
               console.log(route);
-              return /* NotFound */1;
+              return /* NotFound */0;
           }
         } else {
           console.log(route);
-          return /* NotFound */1;
+          return /* NotFound */0;
         }
       };
       var transition = function (route) {
         if (typeof route === "number") {
-          if (route !== 0) {
-            return Promise.resolve(React.createElement("div", undefined, "NF"));
-          } else {
-            return timePromise(3000).then((function (v) {
-                          return Promise.resolve(ReasonReact.element(undefined, undefined, make$1(v, /* array */[])));
-                        }));
-          }
-        } else {
+          return Promise.resolve(React.createElement("div", undefined, "NF"));
+        } else if (route.tag) {
           var name = route[0];
           return Promise.resolve(Curry._1(Store[/* renderWithStore */1], (function (store) {
                             return ReasonReact.element(undefined, undefined, make(Curry._1(Service[/* fetchDataAbout */1], name), store, /* array */[]));
                           })));
+        } else {
+          var number = route[0];
+          return timePromise(3000).then((function () {
+                        return Promise.resolve(ReasonReact.element(undefined, undefined, make$1(number, /* array */[])));
+                      }));
         }
       };
       return /* module */Block.localModule([
@@ -430,6 +448,19 @@ var MainContent = Routing$ReactTemplate.Application((function (Service) {
                       component[/* jsElementWrapped */14]
                     ]);
           };
+          var intOfStringOpt = function (str) {
+            try {
+              return Caml_format.caml_int_of_string(str);
+            }
+            catch (raw_exn){
+              var exn = Js_exn.internalToOCamlException(raw_exn);
+              if (exn[0] === Caml_builtin_exceptions.failure) {
+                return undefined;
+              } else {
+                throw exn;
+              }
+            }
+          };
           var urlToRoute = function (url, queryParam) {
             var route = url[/* path */0];
             if (route) {
@@ -437,9 +468,9 @@ var MainContent = Routing$ReactTemplate.Application((function (Service) {
                 case "about" : 
                     if (route[1]) {
                       console.log(route);
-                      return /* NotFound */1;
+                      return /* NotFound */0;
                     } else {
-                      return /* About */Block.simpleVariant("About", [Belt_MapString.getWithDefault(queryParam, "name", "default!")]);
+                      return /* About */Block.variant("About", 1, [Belt_MapString.getWithDefault(queryParam, "name", "default!")]);
                     }
                 case "src" : 
                     var match = route[1];
@@ -447,38 +478,39 @@ var MainContent = Routing$ReactTemplate.Application((function (Service) {
                       if (match[0] === "index.html") {
                         if (match[1]) {
                           console.log(route);
-                          return /* NotFound */1;
+                          return /* NotFound */0;
                         } else {
-                          return /* Home */0;
+                          var __x = Belt_MapString.get(queryParam, "name");
+                          var __x$1 = Belt_Option.flatMap(__x, intOfStringOpt);
+                          return /* Home */Block.variant("Home", 0, [Belt_Option.getWithDefault(__x$1, 0)]);
                         }
                       } else {
                         console.log(route);
-                        return /* NotFound */1;
+                        return /* NotFound */0;
                       }
                     } else {
                       console.log(route);
-                      return /* NotFound */1;
+                      return /* NotFound */0;
                     }
                 default:
                   console.log(route);
-                  return /* NotFound */1;
+                  return /* NotFound */0;
               }
             } else {
               console.log(route);
-              return /* NotFound */1;
+              return /* NotFound */0;
             }
           };
           var transition = function (route) {
             if (typeof route === "number") {
-              if (route !== 0) {
-                return Promise.resolve(React.createElement("div", undefined, "NF"));
-              } else {
-                return timePromise(3000).then((function (v) {
-                              return Promise.resolve(ReasonReact.element(undefined, undefined, make$1(v, /* array */[])));
-                            }));
-              }
-            } else {
+              return Promise.resolve(React.createElement("div", undefined, "NF"));
+            } else if (route.tag) {
               return Promise.resolve(ReasonReact.element(undefined, undefined, make(Curry._1(Service[/* fetchDataAbout */1], route[0]), store, /* array */[])));
+            } else {
+              var number = route[0];
+              return timePromise(3000).then((function () {
+                            return Promise.resolve(ReasonReact.element(undefined, undefined, make$1(number, /* array */[])));
+                          }));
             }
           };
           return /* module */Block.localModule([

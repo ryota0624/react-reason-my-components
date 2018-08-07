@@ -17,6 +17,7 @@ var Helpers$ReactTemplate = require("./Helpers.bs.js");
 var Routing$ReactTemplate = require("./Routing.bs.js");
 var Tooltip$ReactTemplate = require("./Tooltip.bs.js");
 var TreeData$ReactTemplate = require("./TreeData.bs.js");
+var UrlParser$ReactTemplate = require("./UrlParser.bs.js");
 var ModalSample$ReactTemplate = require("./ModalSample.bs.js");
 var PromiseWrapper$ReactTemplate = require("./PromiseWrapper.bs.js");
 var IncrementalSearch$ReactTemplate = require("./IncrementalSearch.bs.js");
@@ -406,7 +407,7 @@ var tree = Curry._1(UserTree[/* node */1], /* :: */Block.simpleVariant("::", [
           ])
       ]));
 
-console.log(tree);
+UrlParser$ReactTemplate.Sample[/* start */2](/* () */0);
 
 ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonReact.element(undefined, undefined, Tooltip$ReactTemplate.make(/* Down */2, /* Large */2, "IAM TOOLTIP", React.createElement("button", {
                       className: "target"

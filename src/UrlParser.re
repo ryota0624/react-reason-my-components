@@ -1,4 +1,4 @@
-/* open Belt;
+open Belt;
 open ReasonReact.Router;
 
 type state('value) = {
@@ -44,13 +44,16 @@ let s = (str) => Parser(({visited, unvisited, params, value}) => {
   };
 });
   
-/* let string: parser((string => 'a), 'a)  = custom("STRING", ((v: string) => Result.Ok(v)));
+/** https://ocamlverse.github.io/content/weak_type_variables.html
+ * unitをとって関数が実行されると、実行の文脈から型が決まってコンパイルエラーにならない？
+ */
+let string () : parser((string => 'a), 'a) = custom("STRING", ((v: string) => Result.Ok(v))); 
 
-let int: parser((int => 'a), 'a) = custom("INT", (v => {
+let int () : parser((int => 'a), 'a) = custom("INT", (v => {
   try(Ok(int_of_string(v))) {
   | Failure(msg) => Result.Error(msg)
   }
-})); */
+})); 
   
 let (<//>) = (Parser(parseBefore), Parser(parseAfter)) => 
   Parser(
@@ -117,13 +120,29 @@ let parse = (Parser(parse), parsedUrl, params) => {
 let parseRouterUrl = (parser, url: ReasonReact.Router.url) => 
   parse(parser, url.path, ReactHelper.Router.routeToqueryParamMap(url));
 
-type route = Home(string, int) | AB;
-let home = (v1, v2) => Home(v1, v2);
+
 module Sample {
   
+  type route = Home(string, string) | AB(string);
+  let home = (v1, v2) => Home(v1, v2);
+  let ab = (v) => AB(v)
+  let start = () => {
 
-  let _ = () => {
-    let parser = top <//> s("about") <//> s("user");
-    let ur = map(home, parser);
+    Js.Console.log("Start");
+
+
+    let successRoute = top <//> string() <//> string();
+    let failRoute = top <//> string() <//> s("fail");
+    let parser = oneOf([
+        map(home, successRoute),
+        map(ab , failRoute)
+      ]);
+
+    Js.Console.log(ReasonReact.Router.dangerouslyGetInitialUrl())
+
+    let parsed = parseRouterUrl(parser, ReasonReact.Router.dangerouslyGetInitialUrl());
+
+    Js.Console.log(parsed)
   }
-}; */
+
+};
