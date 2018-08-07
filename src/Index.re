@@ -1,63 +1,60 @@
 include PromiseWrapper;
 
-let andThen = (a, b, v) => b(a(v)); 
+let andThen = (a, b, v) => b(a(v));
 let (>>) = andThen;
-let toFragment = (fn) => (. a) => fn(a);
+let toFragment = fn => (. a) => fn(a);
 let (~>) = toFragment;
 
-[@bs.module "./externalJsModules/ExecuteSomeService"] external execute : int => int = "";
+[@bs.module "./externalJsModules/ExecuteSomeService"]
+external execute : int => int = "";
 let executeResult = execute(100);
 
 Js.Console.log(executeResult);
 
-[@bs.module "./externalJsModules/ExecuteSomeService"] external executeNullable : int => Js.Undefined.t(int) = "executeNullable";
+[@bs.module "./externalJsModules/ExecuteSomeService"]
+external executeNullable : int => Js.Undefined.t(int) = "executeNullable";
 let executeNullableResult = executeNullable(100);
 Js.Console.log(executeNullableResult);
 let _ = {
   open Js;
   open Js.Promise;
-  let executeNullableResultOpt: option(int) = Js.Undefined.toOption(executeNullableResult);
+  let executeNullableResultOpt: option(int) =
+    Js.Undefined.toOption(executeNullableResult);
   let appendOne = (+)(1);
-  let r = executeNullableResultOpt
-  |> Option.map((. a) => appendOne(a))
-  |> Option.map(~> appendOne)
-  |> Belt.Option.map(_, appendOne)
-  |. Belt.Option.map(appendOne);
+  let r =
+    executeNullableResultOpt
+    |> Option.map((. a) => appendOne(a))
+    |> Option.map(~>appendOne)
+    |> Belt.Option.map(_, appendOne)
+    |. Belt.Option.map(appendOne);
   Console.log(r);
 };
 
-
-
-[@bs.module "./externalJsModules/ExecuteSomeService"] external executePromise : int => Js.Promise.t(int) = "executePromise";
+[@bs.module "./externalJsModules/ExecuteSomeService"]
+external executePromise : int => Js.Promise.t(int) = "executePromise";
 let executePromiseResult = executePromise(100);
 
 Js.Promise.(
   executePromiseResult
-    |> then_((+)(100) >> resolve)
-    |> then_(andThen(Js.Console.log, resolve))
+  |> then_((+)(100) >> resolve)
+  |> then_(andThen(Js.Console.log, resolve))
 );
 
-type argObj = { .
-  name: string
-};
+type argObj = {. name: string};
 
-let sampleArgObj = {
-  pub name = "hoge"
-};
+let sampleArgObj = {pub name = "hoge"};
 
 [@bs.deriving abstract]
-type argJsObj = {
-  name: string
-};
+type argJsObj = {name: string};
 
-[@bs.module "./externalJsModules/ExecuteSomeService"] external executeArgObj : argJsObj => argJsObj = ""
+[@bs.module "./externalJsModules/ExecuteSomeService"]
+external executeArgObj : argJsObj => argJsObj = "";
 let _ = {
-  let argJsObjSample = (argJsObj(~name="RYO"));
+  let argJsObjSample = argJsObj(~name="RYO");
   Js.Console.log(executeArgObj(argJsObjSample));
   Js.Console.log(argJsObjSample |. nameGet);
   Js.Console.log({js|りょうた|js});
   Js.Console.log({j|りょうた|j});
-
 };
 
 module IntPromiseWrapperDef = {
@@ -260,5 +257,3 @@ ReactDOMRe.renderToElementWithId(
   </div>,
   "index",
 );
-
-

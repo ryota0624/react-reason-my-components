@@ -13,10 +13,9 @@ type animalA = {
 };
 
 module ANIMAL = {
-  type a = pri {
-    name: string
-    };
+  type a = pri {name: string};
 
-  type b = pri B | BB;
+  type b = pri | B | BB;
+};
 
-}
+type huu = {name: string};
