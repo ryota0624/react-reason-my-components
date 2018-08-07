@@ -65,7 +65,7 @@ let int = () : parser(int => 'a, 'a) =>
     }
   );
 
-let (</\/>) = (Parser(parseBefore), Parser(parseAfter)) =>
+let (/) = (Parser(parseBefore), Parser(parseAfter)) =>
   Parser(
     state => parseBefore(state) |> List.map(_, parseAfter) |> List.flatten,
   );
@@ -84,6 +84,8 @@ let map = (subValue, Parser(parse)) =>
       List.map(parsed, mapHelp(value));
     },
   );
+
+let (=>>) = (p, s) => [map(s, p)];
 
 let oneOf = parsers =>
   Parser(
@@ -120,24 +122,32 @@ let parse = (Parser(parse), parsedUrl, params) =>
 let parseRouterUrl = (parser, url: ReasonReact.Router.url) =>
   parse(parser, url.path, ReactHelper.Router.routeToqueryParamMap(url));
 
+let (->>) = (route1, route2) => List.concat(route1, route2);
+
+
 module Sample = {
+  let andThen = (a, b, v) => b(a(v));
+  let (>>) = andThen;
   type route =
     | Home(string, string)
-    | AB(string);
+    | AB(string)
+    | NotFound;
+  
   let home = (v1, v2) => Home(v1, v2);
   let ab = v => AB(v);
+
   let start = () => {
     Js.Console.log("Start");
 
-    let successRoute = top </\/> string() </\/> string();
-    let failRoute = top </\/> string() </\/> s("fail");
-    let parser = oneOf([map(home, successRoute), map(ab, failRoute)]);
-
-    Js.Console.log(ReasonReact.Router.dangerouslyGetInitialUrl());
+    let homeRoute = top / string() / string() =>> home;
+    let abRoute = top / string() / s("fail") / s("hoge") =>> ab;
+    let parser = oneOf(abRoute ->> homeRoute);
 
     let parsed =
       parseRouterUrl(parser, ReasonReact.Router.dangerouslyGetInitialUrl());
 
+    let _ = ReasonReact.Router.watchUrl(parseRouterUrl(parser) >> Option.getWithDefault(_, NotFound) >> Js.Console.log);
+    
     Js.Console.log(parsed);
   };
 };

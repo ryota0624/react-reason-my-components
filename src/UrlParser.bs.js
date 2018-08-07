@@ -5,6 +5,7 @@ var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Js_exn = require("bs-platform/lib/js/js_exn.js");
 var Belt_List = require("bs-platform/lib/js/belt_List.js");
+var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
@@ -98,7 +99,7 @@ function $$int() {
               }));
 }
 
-function $less$slash$slash$great(param, param$1) {
+function $slash(param, param$1) {
   var parseAfter = param$1[0];
   var parseBefore = param[0];
   return /* Parser */Block.simpleVariant("Parser", [(function (state) {
@@ -140,6 +141,13 @@ function map(subValue, param) {
                               return mapHelp(value, param);
                             }));
               })]);
+}
+
+function $eq$great$great(p, s) {
+  return /* :: */Block.simpleVariant("::", [
+            map(s, p),
+            /* [] */0
+          ]);
 }
 
 function oneOf(parsers) {
@@ -214,6 +222,12 @@ function parseRouterUrl(parser, url) {
   return parse(parser, url[/* path */0], ReactHelper$ReactTemplate.Router[/* routeToqueryParamMap */3](url));
 }
 
+var $neg$great$great = Belt_List.concat;
+
+function andThen(a, b, v) {
+  return Curry._1(b, Curry._1(a, v));
+}
+
 function home(v1, v2) {
   return /* Home */Block.variant("Home", 0, [
             v1,
@@ -227,32 +241,34 @@ function ab(v) {
 
 function start() {
   console.log("Start");
-  var successRoute = $less$slash$slash$great($less$slash$slash$great(top, custom("STRING", (function (v) {
+  var homeRoute = $eq$great$great($slash($slash(top, custom("STRING", (function (v) {
+                      return /* Ok */Block.variant("Ok", 0, [v]);
+                    }))), custom("STRING", (function (v) {
                   return /* Ok */Block.variant("Ok", 0, [v]);
-                }))), custom("STRING", (function (v) {
-              return /* Ok */Block.variant("Ok", 0, [v]);
-            })));
-  var failRoute = $less$slash$slash$great($less$slash$slash$great(top, custom("STRING", (function (v) {
-                  return /* Ok */Block.variant("Ok", 0, [v]);
-                }))), s("fail"));
-  var parser = oneOf(/* :: */Block.simpleVariant("::", [
-          map(home, successRoute),
-          /* :: */Block.simpleVariant("::", [
-              map(ab, failRoute),
-              /* [] */0
-            ])
-        ]));
-  console.log(ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0));
+                }))), home);
+  var abRoute = $eq$great$great($slash($slash($slash(top, custom("STRING", (function (v) {
+                          return /* Ok */Block.variant("Ok", 0, [v]);
+                        }))), s("fail")), s("hoge")), ab);
+  var parser = oneOf(Belt_List.concat(abRoute, homeRoute));
   var parsed = parseRouterUrl(parser, ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0));
+  ReasonReact.Router[/* watchUrl */1]((function (param) {
+          var __x = parseRouterUrl(parser, param);
+          console.log(Belt_Option.getWithDefault(__x, /* NotFound */0));
+          return /* () */0;
+        }));
   console.log(parsed);
   return /* () */0;
 }
 
 var Sample = /* module */Block.localModule([
+    "andThen",
+    ">>",
     "home",
     "ab",
     "start"
   ], [
+    andThen,
+    andThen,
     home,
     ab,
     start
@@ -262,14 +278,16 @@ exports.custom = custom;
 exports.s = s;
 exports.string = string;
 exports.$$int = $$int;
-exports.$less$slash$slash$great = $less$slash$slash$great;
+exports.$slash = $slash;
 exports.mapHelp = mapHelp;
 exports.map = map;
+exports.$eq$great$great = $eq$great$great;
 exports.oneOf = oneOf;
 exports.top = top;
 exports.parseHelp = parseHelp;
 exports.splitUrl = splitUrl;
 exports.parse = parse;
 exports.parseRouterUrl = parseRouterUrl;
+exports.$neg$great$great = $neg$great$great;
 exports.Sample = Sample;
 /* ReasonReact Not a pure module */
