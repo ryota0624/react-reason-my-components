@@ -126,7 +126,7 @@ let (->>) = (route1, route2) => List.concat(route1, route2);
 
 type queryParser('a, 'b) = QueryParser(state('a) => list(state('b)));
 
-let (?|) = (Parser(parser), QueryParser(queryParser)) => {
+let (|?) = (Parser(parser), QueryParser(queryParser)) => {
   Parser((state) => {
     (parser(state))
       |> List.map(_, queryParser)
@@ -169,7 +169,7 @@ module Sample = {
     Js.Console.log("Start");
 
     let homeRoute = top / string() / string() =>> home;
-    let abRoute = top / string() / s("fail") / s("hoge") ?| stringParam =>> ab;
+    let abRoute = top / string() / s("fail") / s("hoge") |? stringParam("name") =>> ab;
     let parser = oneOf(abRoute ->> homeRoute);
 
     let parsed =

@@ -9,6 +9,7 @@ var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
+var Belt_MapString = require("bs-platform/lib/js/belt_MapString.js");
 var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 var ReactHelper$ReactTemplate = require("./ReactHelper.bs.js");
 
@@ -224,6 +225,59 @@ function parseRouterUrl(parser, url) {
 
 var $neg$great$great = Belt_List.concat;
 
+function $pipe$unknown(param, param$1) {
+  var queryParser = param$1[0];
+  var parser = param[0];
+  return /* Parser */Block.simpleVariant("Parser", [(function (state) {
+                var __x = Curry._1(parser, state);
+                return Belt_List.flatten(Belt_List.map(__x, queryParser));
+              })]);
+}
+
+function customParam(key, func) {
+  return /* QueryParser */Block.simpleVariant("QueryParser", [(function (param) {
+                var params = param[/* params */2];
+                return /* :: */Block.simpleVariant("::", [
+                          /* record */Block.record([
+                              "visited",
+                              "unvisited",
+                              "params",
+                              "value"
+                            ], [
+                              param[/* visited */0],
+                              param[/* unvisited */1],
+                              params,
+                              Curry._1(param[/* value */3], Curry._1(func, Belt_MapString.get(params, key)))
+                            ]),
+                          /* [] */0
+                        ]);
+              })]);
+}
+
+function stringParam(name) {
+  return customParam(name, (function (v) {
+                return v;
+              }));
+}
+
+function intParam(name) {
+  return customParam(name, (function (stringValueOpt) {
+                return Belt_Option.flatMap(stringValueOpt, (function (stringValue) {
+                              try {
+                                return Caml_format.caml_int_of_string(stringValue);
+                              }
+                              catch (raw_exn){
+                                var exn = Js_exn.internalToOCamlException(raw_exn);
+                                if (exn[0] === Caml_builtin_exceptions.failure) {
+                                  return undefined;
+                                } else {
+                                  throw exn;
+                                }
+                              }
+                            }));
+              }));
+}
+
 function andThen(a, b, v) {
   return Curry._1(b, Curry._1(a, v));
 }
@@ -235,8 +289,11 @@ function home(v1, v2) {
           ]);
 }
 
-function ab(v) {
-  return /* AB */Block.variant("AB", 1, [v]);
+function ab(v, v2) {
+  return /* AB */Block.variant("AB", 1, [
+            v,
+            v2
+          ]);
 }
 
 function start() {
@@ -246,9 +303,11 @@ function start() {
                     }))), custom("STRING", (function (v) {
                   return /* Ok */Block.variant("Ok", 0, [v]);
                 }))), home);
-  var abRoute = $eq$great$great($slash($slash($slash(top, custom("STRING", (function (v) {
-                          return /* Ok */Block.variant("Ok", 0, [v]);
-                        }))), s("fail")), s("hoge")), ab);
+  var abRoute = $eq$great$great($pipe$unknown($slash($slash($slash(top, custom("STRING", (function (v) {
+                              return /* Ok */Block.variant("Ok", 0, [v]);
+                            }))), s("fail")), s("hoge")), customParam("name", (function (v) {
+                  return v;
+                }))), ab);
   var parser = oneOf(Belt_List.concat(abRoute, homeRoute));
   var parsed = parseRouterUrl(parser, ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0));
   ReasonReact.Router[/* watchUrl */1]((function (param) {
@@ -289,5 +348,9 @@ exports.splitUrl = splitUrl;
 exports.parse = parse;
 exports.parseRouterUrl = parseRouterUrl;
 exports.$neg$great$great = $neg$great$great;
+exports.$pipe$unknown = $pipe$unknown;
+exports.customParam = customParam;
+exports.stringParam = stringParam;
+exports.intParam = intParam;
 exports.Sample = Sample;
 /* ReasonReact Not a pure module */
