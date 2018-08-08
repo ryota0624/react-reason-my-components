@@ -3,6 +3,7 @@
 
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Operator$ReactTemplate = require("../Operator.bs.js");
 var Validation$ReactTemplate = require("../Validation.bs.js");
 
 var validateText = Validation$ReactTemplate.fromErrors((function (text) {
@@ -55,9 +56,7 @@ function ifEmptyString(getString, errors) {
 Validation$ReactTemplate.run(validateText, "success!");
 
 Validation$ReactTemplate.run(Validation$ReactTemplate.all(/* :: */Block.simpleVariant("::", [
-            ifEmptyString((function (v) {
-                    return v;
-                  }), /* :: */Block.simpleVariant("::", [
+            ifEmptyString(Operator$ReactTemplate.identity, /* :: */Block.simpleVariant("::", [
                     /* TextIsEmpty */1,
                     /* [] */0
                   ])),
@@ -67,23 +66,22 @@ Validation$ReactTemplate.run(Validation$ReactTemplate.all(/* :: */Block.simpleVa
               ])
           ])), "");
 
+var sample = {
+  name: "dad",
+  age: 30
+};
+
 Validation$ReactTemplate.run(Validation$ReactTemplate.all(/* :: */Block.simpleVariant("::", [
-            validateAge((function (r) {
-                    return r[/* age */1];
+            validateAge((function (prim) {
+                    return prim.age;
                   })),
             /* :: */Block.simpleVariant("::", [
-                validateName((function (r) {
-                        return r[/* name */0];
+                validateName((function (prim) {
+                        return prim.name;
                       })),
                 /* [] */0
               ])
-          ])), /* record */Block.record([
-        "name",
-        "age"
-      ], [
-        "dad",
-        30
-      ]));
+          ])), sample);
 
 exports.validateText = validateText;
 exports.validateAge = validateAge;

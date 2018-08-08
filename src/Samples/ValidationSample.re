@@ -1,3 +1,4 @@
+open Operator;
 type validationFailure =
   | TextIsOverMaxLength
   | TextIsEmpty;
@@ -15,6 +16,7 @@ type sampleRecordValidationFailure =
   | InvalidName
   | InvalidAge;
 
+[@bs.deriving abstract]
 type sampleRecord = {
   name: string,
   age: int,
@@ -55,14 +57,15 @@ let () = {
 
   let _ =
     Validation.run(
-      Validation.all([ifEmptyString(v => v, [TextIsEmpty]), validateText]),
+      Validation.all([ifEmptyString(identity, [TextIsEmpty]), validateText]),
       "",
     );
 
-  let _ =
+  let _ = {
+    let sample = sampleRecord(~age=30,~name= "dad");
     Validation.run(
-      Validation.all([validateAge(r => r.age), validateName(r => r.name)]),
-      {age: 30, name: "dad"},
+      Validation.all([validateAge(ageGet), validateName(nameGet)]),
+      sample
     );
-  ();
+  }
 };
