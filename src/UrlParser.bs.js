@@ -298,6 +298,17 @@ function ab(v, v2) {
 
 function start() {
   console.log("Start");
+  var toRoute = function (s, p) {
+    return /* :: */Block.simpleVariant("::", [
+              map(s, p),
+              /* [] */0
+            ]);
+  };
+  var homeRoute2 = toRoute(home, $slash($slash(top, custom("STRING", (function (v) {
+                      return /* Ok */Block.variant("Ok", 0, [v]);
+                    }))), custom("STRING", (function (v) {
+                  return /* Ok */Block.variant("Ok", 0, [v]);
+                }))));
   var homeRoute = $eq$great$great($slash($slash(top, custom("STRING", (function (v) {
                       return /* Ok */Block.variant("Ok", 0, [v]);
                     }))), custom("STRING", (function (v) {
@@ -308,7 +319,8 @@ function start() {
                             }))), s("fail")), s("hoge")), customParam("name", (function (v) {
                   return v;
                 }))), ab);
-  var parser = oneOf(Belt_List.concat(abRoute, homeRoute));
+  var route1 = Belt_List.concat(abRoute, homeRoute);
+  var parser = oneOf(Belt_List.concat(route1, homeRoute2));
   var parsed = parseRouterUrl(parser, ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0));
   ReasonReact.Router[/* watchUrl */1]((function (param) {
           var __x = parseRouterUrl(parser, param);

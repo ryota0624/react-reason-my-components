@@ -85,6 +85,7 @@ let map = (subValue, Parser(parse)) =>
     },
   );
 
+
 let (=>>) = (p, s) => [map(s, p)];
 
 let oneOf = parsers =>
@@ -168,9 +169,14 @@ module Sample = {
   let start = () => {
     Js.Console.log("Start");
 
+    let toRoute = (s, p) => [map(s, p)]
+
+    /* let a = (10 to 200); */
+    let homeRoute2= top / string() / string() |> toRoute(home);
+
     let homeRoute = top / string() / string() =>> home;
     let abRoute = top / string() / s("fail") / s("hoge") |? stringParam("name") =>> ab;
-    let parser = oneOf(abRoute ->> homeRoute);
+    let parser = oneOf(abRoute ->> homeRoute ->> homeRoute2);
 
     let parsed =
       parseRouterUrl(parser, ReasonReact.Router.dangerouslyGetInitialUrl());
