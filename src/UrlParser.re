@@ -124,23 +124,52 @@ let parseRouterUrl = (parser, url: ReasonReact.Router.url) =>
 
 let (->>) = (route1, route2) => List.concat(route1, route2);
 
+type queryParser('a, 'b) = QueryParser(state('a) => list(state('b)));
+
+let (?|) = (Parser(parser), QueryParser(queryParser)) => {
+  Parser((state) => {
+    (parser(state))
+      |> List.map(_, queryParser)
+      |> List.flatten
+  })
+};
+
+let customParam = (key, func) => QueryParser(({visited, unvisited, params, value}) => {
+  [{
+    visited,
+    unvisited,
+    params,
+    value: value(func(Belt.Map.String.get(params, key)))
+  }]
+});
+
+let stringParam = (name) => customParam(name, (v) => v);
+
+let intParam = (name) => customParam(name, (stringValueOpt) => {
+  stringValueOpt
+    |> Option.flatMap(_, (stringValue => {
+      try(Some(int_of_string(stringValue))) {
+      | Failure(_) => None
+      }
+    }))
+});
 
 module Sample = {
   let andThen = (a, b, v) => b(a(v));
   let (>>) = andThen;
   type route =
     | Home(string, string)
-    | AB(string)
+    | AB(string, option(string))
     | NotFound;
   
   let home = (v1, v2) => Home(v1, v2);
-  let ab = v => AB(v);
+  let ab = (v, v2) => AB(v, v2);
 
   let start = () => {
     Js.Console.log("Start");
 
     let homeRoute = top / string() / string() =>> home;
-    let abRoute = top / string() / s("fail") / s("hoge") =>> ab;
+    let abRoute = top / string() / s("fail") / s("hoge") ?| stringParam =>> ab;
     let parser = oneOf(abRoute ->> homeRoute);
 
     let parsed =
