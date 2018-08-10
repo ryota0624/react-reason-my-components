@@ -1,3 +1,6 @@
+/* todo textの長さチェック、数字に変換できるかチェック、option型にチェックできるやつ
+   variantは型構築子一つならswitchいらずか確認
+*/
 type validator('e, 's) =
   | Validator('s => list('e));
 
