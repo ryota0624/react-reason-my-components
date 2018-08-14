@@ -116,6 +116,8 @@ module MainContentRouting =
     | Failure(_) => None
     };
   type route = appRoute;
+         
+  /* todo url-parserで置き換えてみる */       
   let urlToRoute = (url: ReasonReact.Router.url, queryParam) =>
     switch (url.path) {
     | ["src", "index.html"] =>
@@ -131,6 +133,8 @@ module MainContentRouting =
       Js.Console.log(route);
       NotFound;
     };
+     
+  /* todm 関数合成で表現してみたい */           
   let transition = route =>
     switch (route) {
     | Home(number) =>
@@ -147,6 +151,7 @@ module MainContentRouting =
 };
 
 module App = {
+  /* todo AppとStateManagementDefの棲み分けをより明確にしたい */
   include StateManagementDef;
 
   let initialState = {error: None, notification: None};
