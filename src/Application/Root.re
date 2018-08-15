@@ -13,6 +13,8 @@ module Utils = {
     });
 };
 
+open Operator
+
 let (==>) = (a, b) => (a, b);
 
 type appRoute =
@@ -58,6 +60,7 @@ module AllExternalSerciceImpl: AllExternalSercice = {
 module StateManagementDef = {
   type error = {messages: list(string)};
   type notification = {messages: list(string)};
+  let getMessages = ({messages}: notification) => messages;
   type action =
     | DetectedError(error)
     | RefreshError;
@@ -69,33 +72,34 @@ module StateManagementDef = {
 };
 
 module MakeHomeContainer =
-       (Store: GlobalStore, HomeExternalService: HomeExternalService) => {
-  let component = ReasonReact.statelessComponent("MakeHomeContainer");
+       (Store: GlobalStore with type state = StateManagementDef.state, HomeExternalService: HomeExternalService) => {
+  let component = ReasonReact.statelessComponent("HomeContainer");
   let make = (~number, _children) => {
     ...component,
-    render: _ =>
+    render: _ => {
+      let notification = GlobalStateManagement.Manager.getState(Store.store).notification
+          |> Belt.Option.map(_, StateManagementDef.getMessages >> List.hd)
+          |> Belt.Option.getWithDefault(_, "");
       <div>
         <div> (number |> string_of_int |> ReasonReact.string) </div>
+        <div> (notification |> ReasonReact.string) </div>
         (ReasonReact.string(HomeExternalService.fetchDataHome("HOME")))
-      </div>,
+      </div>
+    }
   };
 };
 
-module AboutContainer = {
+module MakeAboutContainer =
+  (Store: GlobalStore, AboutExternalService: AboutExternalService) => {
   let component = ReasonReact.statelessComponent("AboutContainer");
   let make =
       (
         ~string,
-        ~store:
-           GlobalStateManagement.Manager.t(
-             StateManagementDef.action,
-             StateManagementDef.state,
-           ),
         _children,
       ) => {
     ...component,
     render: _ => {
-      let globalState = GlobalStateManagement.Manager.getState(store);
+      let _ = Store.store;
       <div> <div> (string |> ReasonReact.string) </div> </div>;
     },
   };
@@ -109,7 +113,10 @@ module MainContentRouting =
          Service: AllExternalSercice,
        )
        : Routing.Routing => {
+  open UrlParser;
+
   module HomePage = MakeHomeContainer(Store, Service);
+  module AboutPage = MakeAboutContainer(Store, Service);
 
   let intOfStringOpt = str =>
     try (Some(int_of_string(str))) {
@@ -133,6 +140,9 @@ module MainContentRouting =
       Js.Console.log(route);
       NotFound;
     };
+
+    let urlToRoute2 = top / s("src") / s("index.html") |? stringParam("name") 
+      |> toRoute((strOpt) => Home(0));
      
   /* todm 関数合成で表現してみたい */           
   let transition = route =>
@@ -141,9 +151,7 @@ module MainContentRouting =
       Utils.timePromise(3000)
       |> Js.Promise.then_(_ => <HomePage number /> |> Js.Promise.resolve)
     | About(name) =>
-      Store.renderWithStore(~render=store =>
-        <AboutContainer string=(Service.fetchDataAbout(name)) store />
-      )
+        <AboutPage string=(Service.fetchDataAbout(name)) />
       |> Js.Promise.resolve
     | NotFound =>
       <div> (ReasonReact.string("NF")) </div> |> Js.Promise.resolve

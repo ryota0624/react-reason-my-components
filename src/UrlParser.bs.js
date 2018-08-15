@@ -278,6 +278,13 @@ function intParam(name) {
               }));
 }
 
+function toRoute(s, p) {
+  return /* :: */Block.simpleVariant("::", [
+            map(s, p),
+            /* [] */0
+          ]);
+}
+
 function andThen(a, b, v) {
   return Curry._1(b, Curry._1(a, v));
 }
@@ -298,12 +305,6 @@ function ab(v, v2) {
 
 function start() {
   console.log("Start");
-  var toRoute = function (s, p) {
-    return /* :: */Block.simpleVariant("::", [
-              map(s, p),
-              /* [] */0
-            ]);
-  };
   var homeRoute2 = toRoute(home, $slash($slash(top, custom("STRING", (function (v) {
                       return /* Ok */Block.variant("Ok", 0, [v]);
                     }))), custom("STRING", (function (v) {
@@ -364,5 +365,6 @@ exports.$pipe$unknown = $pipe$unknown;
 exports.customParam = customParam;
 exports.stringParam = stringParam;
 exports.intParam = intParam;
+exports.toRoute = toRoute;
 exports.Sample = Sample;
 /* ReasonReact Not a pure module */

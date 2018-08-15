@@ -257,3 +257,6 @@ ReactDOMRe.renderToElementWithId(
   </div>,
   "index",
 );
+
+
+let plus = (a: int, b: int): int => a + b; 

@@ -155,6 +155,8 @@ let intParam = (name) => customParam(name, (stringValueOpt) => {
     }))
 });
 
+let toRoute = (s, p) => [map(s, p)]
+
 module Sample = {
   let andThen = (a, b, v) => b(a(v));
   let (>>) = andThen;
@@ -169,7 +171,6 @@ module Sample = {
   let start = () => {
     Js.Console.log("Start");
 
-    let toRoute = (s, p) => [map(s, p)]
 
     /* let a = (10 to 200); */
     let homeRoute2= top / string() / string() |> toRoute(home);

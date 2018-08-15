@@ -428,6 +428,10 @@ ReactDOMRe.renderToElementWithId(React.createElement("div", undefined, ReasonRea
                     return /* () */0;
                   }))), Curry._1(UserTree[/* showTree */4], tree)), "index");
 
+function plus(a, b) {
+  return a + b | 0;
+}
+
 var PromiseWrapper = PromiseWrapper$ReactTemplate.PromiseWrapper;
 
 var $great$great = andThen;
@@ -472,4 +476,5 @@ exports.userFactory = userFactory;
 exports.UserLeaf = UserLeaf;
 exports.UserTree = UserTree;
 exports.userTreeSample = userTreeSample;
+exports.plus = plus;
 /* executeResult Not a pure module */
