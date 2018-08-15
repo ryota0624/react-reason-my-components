@@ -6,15 +6,11 @@ var $$Array = require("bs-platform/lib/js/array.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
-var Js_exn = require("bs-platform/lib/js/js_exn.js");
 var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
 var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
-var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
-var Belt_MapString = require("bs-platform/lib/js/belt_MapString.js");
 var Routing$ReactTemplate = require("../Routing.bs.js");
 var Operator$ReactTemplate = require("../Operator.bs.js");
-var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 var UrlParser$ReactTemplate = require("../UrlParser.bs.js");
 var ReactHelper$ReactTemplate = require("../ReactHelper.bs.js");
 var GlobalStateManagement$ReactTemplate = require("../Samples/GlobalStateManagement.bs.js");
@@ -252,62 +248,16 @@ function MainContentRouting(Store) {
                   component$1[/* jsElementWrapped */14]
                 ]);
       };
-      var intOfStringOpt = function (str) {
-        try {
-          return Caml_format.caml_int_of_string(str);
-        }
-        catch (raw_exn){
-          var exn = Js_exn.internalToOCamlException(raw_exn);
-          if (exn[0] === Caml_builtin_exceptions.failure) {
-            return undefined;
-          } else {
-            throw exn;
-          }
-        }
+      var homeRoute = UrlParser$ReactTemplate.toRoute((function (intValue) {
+              return /* Home */Block.variant("Home", 0, [intValue]);
+            }), UrlParser$ReactTemplate.$pipe$unknown(UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.top, UrlParser$ReactTemplate.s("src")), UrlParser$ReactTemplate.s("index.html")), UrlParser$ReactTemplate.intParamWithDefault("name", 0)));
+      var aboutRoute = UrlParser$ReactTemplate.toRoute((function (str) {
+              return /* About */Block.variant("About", 1, [str]);
+            }), UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.top, UrlParser$ReactTemplate.s("about")), UrlParser$ReactTemplate.string(/* () */0)));
+      var urlToRoute2 = UrlParser$ReactTemplate.oneOf(UrlParser$ReactTemplate.$neg$great$great(homeRoute, aboutRoute));
+      var urlToRoute = function (url, _) {
+        return Belt_Option.getExn(UrlParser$ReactTemplate.parseRouterUrl(urlToRoute2, url));
       };
-      var urlToRoute = function (url, queryParam) {
-        var route = url[/* path */0];
-        if (route) {
-          switch (route[0]) {
-            case "about" : 
-                if (route[1]) {
-                  console.log(route);
-                  return /* NotFound */0;
-                } else {
-                  return /* About */Block.variant("About", 1, [Belt_MapString.getWithDefault(queryParam, "name", "default!")]);
-                }
-            case "src" : 
-                var match = route[1];
-                if (match) {
-                  if (match[0] === "index.html") {
-                    if (match[1]) {
-                      console.log(route);
-                      return /* NotFound */0;
-                    } else {
-                      var __x = Belt_MapString.get(queryParam, "name");
-                      var __x$1 = Belt_Option.flatMap(__x, intOfStringOpt);
-                      return /* Home */Block.variant("Home", 0, [Belt_Option.getWithDefault(__x$1, 0)]);
-                    }
-                  } else {
-                    console.log(route);
-                    return /* NotFound */0;
-                  }
-                } else {
-                  console.log(route);
-                  return /* NotFound */0;
-                }
-            default:
-              console.log(route);
-              return /* NotFound */0;
-          }
-        } else {
-          console.log(route);
-          return /* NotFound */0;
-        }
-      };
-      UrlParser$ReactTemplate.toRoute((function () {
-              return /* Home */Block.variant("Home", 0, [0]);
-            }), UrlParser$ReactTemplate.$pipe$unknown(UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.top, UrlParser$ReactTemplate.s("src")), UrlParser$ReactTemplate.s("index.html")), UrlParser$ReactTemplate.stringParam("name")));
       var transition = function (route) {
         if (typeof route === "number") {
           return Promise.resolve(React.createElement("div", undefined, "NF"));
@@ -548,62 +498,16 @@ var MainContent = Routing$ReactTemplate.Application((function (Service) {
                       component$1[/* jsElementWrapped */14]
                     ]);
           };
-          var intOfStringOpt = function (str) {
-            try {
-              return Caml_format.caml_int_of_string(str);
-            }
-            catch (raw_exn){
-              var exn = Js_exn.internalToOCamlException(raw_exn);
-              if (exn[0] === Caml_builtin_exceptions.failure) {
-                return undefined;
-              } else {
-                throw exn;
-              }
-            }
+          var homeRoute = UrlParser$ReactTemplate.toRoute((function (intValue) {
+                  return /* Home */Block.variant("Home", 0, [intValue]);
+                }), UrlParser$ReactTemplate.$pipe$unknown(UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.top, UrlParser$ReactTemplate.s("src")), UrlParser$ReactTemplate.s("index.html")), UrlParser$ReactTemplate.intParamWithDefault("name", 0)));
+          var aboutRoute = UrlParser$ReactTemplate.toRoute((function (str) {
+                  return /* About */Block.variant("About", 1, [str]);
+                }), UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.top, UrlParser$ReactTemplate.s("about")), UrlParser$ReactTemplate.string(/* () */0)));
+          var urlToRoute2 = UrlParser$ReactTemplate.oneOf(UrlParser$ReactTemplate.$neg$great$great(homeRoute, aboutRoute));
+          var urlToRoute = function (url, _) {
+            return Belt_Option.getExn(UrlParser$ReactTemplate.parseRouterUrl(urlToRoute2, url));
           };
-          var urlToRoute = function (url, queryParam) {
-            var route = url[/* path */0];
-            if (route) {
-              switch (route[0]) {
-                case "about" : 
-                    if (route[1]) {
-                      console.log(route);
-                      return /* NotFound */0;
-                    } else {
-                      return /* About */Block.variant("About", 1, [Belt_MapString.getWithDefault(queryParam, "name", "default!")]);
-                    }
-                case "src" : 
-                    var match = route[1];
-                    if (match) {
-                      if (match[0] === "index.html") {
-                        if (match[1]) {
-                          console.log(route);
-                          return /* NotFound */0;
-                        } else {
-                          var __x = Belt_MapString.get(queryParam, "name");
-                          var __x$1 = Belt_Option.flatMap(__x, intOfStringOpt);
-                          return /* Home */Block.variant("Home", 0, [Belt_Option.getWithDefault(__x$1, 0)]);
-                        }
-                      } else {
-                        console.log(route);
-                        return /* NotFound */0;
-                      }
-                    } else {
-                      console.log(route);
-                      return /* NotFound */0;
-                    }
-                default:
-                  console.log(route);
-                  return /* NotFound */0;
-              }
-            } else {
-              console.log(route);
-              return /* NotFound */0;
-            }
-          };
-          UrlParser$ReactTemplate.toRoute((function () {
-                  return /* Home */Block.variant("Home", 0, [0]);
-                }), UrlParser$ReactTemplate.$pipe$unknown(UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.$slash(UrlParser$ReactTemplate.top, UrlParser$ReactTemplate.s("src")), UrlParser$ReactTemplate.s("index.html")), UrlParser$ReactTemplate.stringParam("name")));
           var transition = function (route) {
             if (typeof route === "number") {
               return Promise.resolve(React.createElement("div", undefined, "NF"));

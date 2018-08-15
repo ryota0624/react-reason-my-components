@@ -278,6 +278,25 @@ function intParam(name) {
               }));
 }
 
+function intParamWithDefault(name, $$default) {
+  return customParam(name, (function (stringValueOpt) {
+                var __x = Belt_Option.flatMap(stringValueOpt, (function (stringValue) {
+                        try {
+                          return Caml_format.caml_int_of_string(stringValue);
+                        }
+                        catch (raw_exn){
+                          var exn = Js_exn.internalToOCamlException(raw_exn);
+                          if (exn[0] === Caml_builtin_exceptions.failure) {
+                            return $$default;
+                          } else {
+                            throw exn;
+                          }
+                        }
+                      }));
+                return Belt_Option.getWithDefault(__x, $$default);
+              }));
+}
+
 function toRoute(s, p) {
   return /* :: */Block.simpleVariant("::", [
             map(s, p),
@@ -365,6 +384,7 @@ exports.$pipe$unknown = $pipe$unknown;
 exports.customParam = customParam;
 exports.stringParam = stringParam;
 exports.intParam = intParam;
+exports.intParamWithDefault = intParamWithDefault;
 exports.toRoute = toRoute;
 exports.Sample = Sample;
 /* ReasonReact Not a pure module */

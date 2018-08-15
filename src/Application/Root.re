@@ -124,9 +124,16 @@ module MainContentRouting =
     };
   type route = appRoute;
          
+  let homeRoute = top / s("src") / s("index.html") |? intParamWithDefault("name",0) |> toRoute(intValue => Home(intValue))
+  let aboutRoute = top/ s("about") / string() |> toRoute(str => About(str));
+  let urlToRoute2 = oneOf(
+    homeRoute ->> aboutRoute
+  );
+
   /* todo url-parserで置き換えてみる */       
   let urlToRoute = (url: ReasonReact.Router.url, queryParam) =>
-    switch (url.path) {
+    parseRouterUrl(urlToRoute2, url) |> Belt.Option.getExn
+    /* switch (url.path) {
     | ["src", "index.html"] =>
       Home(
         queryParam
@@ -139,10 +146,11 @@ module MainContentRouting =
     | route =>
       Js.Console.log(route);
       NotFound;
-    };
+    }; */
 
-    let urlToRoute2 = top / s("src") / s("index.html") |? stringParam("name") 
-      |> toRoute((strOpt) => Home(0));
+
+
+    /* let subRoute = parseRouterUrl(urlToRoute2) */
      
   /* todm 関数合成で表現してみたい */           
   let transition = route =>

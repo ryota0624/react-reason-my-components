@@ -155,6 +155,16 @@ let intParam = (name) => customParam(name, (stringValueOpt) => {
     }))
 });
 
+let intParamWithDefault = (name, default) => customParam(name, (stringValueOpt) => {
+  stringValueOpt
+    |> Option.flatMap(_, (stringValue => {
+      try(Some(int_of_string(stringValue))) {
+      | Failure(_) => Some(default)
+      }
+    }))
+    |> Option.getWithDefault(_, default)
+});
+
 let toRoute = (s, p) => [map(s, p)]
 
 module Sample = {
